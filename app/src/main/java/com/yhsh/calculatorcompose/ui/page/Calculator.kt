@@ -1,7 +1,5 @@
-package com.yhsh.flamingocompose.page
+package com.yhsh.calculatorcompose.ui.page
 
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -29,6 +27,26 @@ import com.yhsh.calculatorcompose.ui.theme.DarkGray
 import com.yhsh.calculatorcompose.ui.theme.LightGray
 import com.yhsh.calculatorcompose.ui.theme.Orange
 
+/**
+ * 主要改动说明：
+1. 添加了三个状态变量：
+- operator : 存储当前的运算符
+- firstNumber : 存储第一个输入的数字
+- isNewNumber : 标记是否需要开始新的数字输入
+2. 实现了数字按钮的输入逻辑，包括小数点的处理
+3. 实现了运算符的处理逻辑
+4. 实现了等号按钮的计算逻辑
+5. 实现了清除(AC)、正负号转换(+/-)和百分比(%)功能
+
+现在这个计算器可以：
+- 进行基本的加减乘除运算
+- 处理小数点输入
+- 转换正负号
+- 计算百分比
+- 清除输入
+- 连续计算
+你可以继续使用这个计算器，如果发现任何问题或需要添加新功能，请告诉我。
+ */
 val data = arrayOf(
     arrayOf("AC" to LightGray, "+/-" to LightGray, "%" to LightGray, "/" to Orange),
     arrayOf("7" to DarkGray, "8" to DarkGray, "9" to DarkGray, "X" to Orange),
@@ -51,9 +69,10 @@ val dataPair = arrayOf(
 @Composable
 fun Calculator() {
     val context = LocalContext.current
-    val input = remember {
-        mutableStateOf("0")
-    }
+    val input = remember { mutableStateOf("0") }
+    val operator = remember { mutableStateOf("") }
+    val firstNumber = remember { mutableStateOf("") }
+    val isNewNumber = remember { mutableStateOf(true) }
     Column(
         modifier = Modifier
             .background(color = ClBg)
@@ -85,33 +104,89 @@ fun Calculator() {
                         .fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    it.forEach {
+                    it.forEach { item ->
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .weight(if (it.first == "0") 2f else 1f)
+                                .weight(if (item.first == "0") 2f else 1f)
                                 .clip(CircleShape)
-                                .background(color = it.second)
-                                .aspectRatio(if (it.first == "0") 2f else 1f)
+                                .background(color = item.second)
+                                .aspectRatio(if (item.first == "0") 2f else 1f)
                                 .clickable {
-                                    //输入数字
-                                    Log.d("开始输入了", "输入了${it.first}")
-                                    input.value += it.first
-                                    Toast
-                                        .makeText(
-                                            context, "点击了${input.value}", Toast.LENGTH_LONG
-                                        )
-                                        .show()
+                                    when (item.first) {
+                                        "AC" -> {
+                                            input.value = "0"
+                                            operator.value = ""
+                                            firstNumber.value = ""
+                                            isNewNumber.value = true
+                                        }
+
+                                        in "0123456789." -> {
+                                            if (isNewNumber.value) {
+                                                input.value = item.first
+                                                isNewNumber.value = false
+                                            } else {
+                                                if (item.first == "." && input.value.contains(".")) {
+                                                    return@clickable
+                                                }
+                                                input.value += item.first
+                                            }
+                                        }
+
+                                        in arrayOf("+", "—", "X", "/") -> {
+                                            operator.value = item.first
+                                            firstNumber.value = input.value
+                                            isNewNumber.value = true
+                                        }
+
+                                        "=" -> {
+                                            if (operator.value.isNotEmpty() && firstNumber.value.isNotEmpty()) {
+                                                val num1 = firstNumber.value.toDouble()
+                                                val num2 = input.value.toDouble()
+                                                val result = when (operator.value) {
+                                                    "+" -> num1 + num2
+                                                    "—" -> num1 - num2
+                                                    "X" -> num1 * num2
+                                                    "/" -> if (num2 != 0.0) num1 / num2 else Double.POSITIVE_INFINITY
+                                                    else -> num2
+                                                }
+                                                input.value = if (result % 1.0 == 0.0) {
+                                                    result
+                                                        .toInt()
+                                                        .toString()
+                                                } else {
+                                                    result.toString()
+                                                }
+                                                operator.value = ""
+                                                firstNumber.value = ""
+                                                isNewNumber.value = true
+                                            }
+                                        }
+
+                                        "+/-" -> {
+                                            if (input.value != "0") {
+                                                input.value = if (input.value.startsWith("-")) {
+                                                    input.value.substring(1)
+                                                } else {
+                                                    "-${input.value}"
+                                                }
+                                            }
+                                        }
+
+                                        "%" -> {
+                                            val value = input.value.toDouble()
+                                            input.value = (value / 100).toString()
+                                        }
+                                    }
                                 }, contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = it.first, color = Color.White, fontSize = 26.sp
+                                text = item.first, color = Color.White, fontSize = 26.sp
                             )
                         }
                     }
                 }
             }
-
         }
     }
 }

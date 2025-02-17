@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.yhsh.calculatorcompose.ui.theme.CalculatorComposeTheme
-import com.yhsh.flamingocompose.page.Calculator
+import com.yhsh.calculatorcompose.ui.page.Calculator
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
