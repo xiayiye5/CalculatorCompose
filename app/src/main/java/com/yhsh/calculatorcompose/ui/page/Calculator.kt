@@ -33,6 +33,7 @@ val data = arrayOf(
     arrayOf("AC" to LightGray, "+/-" to LightGray, "%" to LightGray, "/" to Orange),
     arrayOf("7" to DarkGray, "8" to DarkGray, "9" to DarkGray, "X" to Orange),
     arrayOf("4" to DarkGray, "5" to DarkGray, "6" to DarkGray, "—" to Orange),
+    arrayOf("1" to DarkGray, "2" to DarkGray, "3" to DarkGray, "+" to Orange),
     arrayOf("0" to DarkGray, "." to DarkGray, "=" to DarkGray)
 )
 val dataPair = arrayOf(
@@ -42,6 +43,8 @@ val dataPair = arrayOf(
         Pair("7", DarkGray), Pair("8", DarkGray), Pair("9", DarkGray), Pair("x", Orange)
     ), arrayOf(
         Pair("4", DarkGray), Pair("5", DarkGray), Pair("6", DarkGray), Pair("—", Orange)
+    ), arrayOf(
+        Pair("1", DarkGray), Pair("2", DarkGray), Pair("3", DarkGray), Pair("+", Orange)
     ), arrayOf(Pair("0", DarkGray), Pair(".", DarkGray), Pair("=", Orange))
 )
 
