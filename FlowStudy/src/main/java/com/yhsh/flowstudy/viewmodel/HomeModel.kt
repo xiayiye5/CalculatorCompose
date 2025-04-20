@@ -8,14 +8,20 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.buffer
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -90,6 +96,52 @@ class HomeModel : ViewModel() {
             }
             sharedInFlow.collect {
                 Log.d("MainActivity", "${Thread.currentThread().name}:sharedIn创建flow的方式二：$it")
+            }
+        }
+    }
+
+    /**
+     * collectLatest 停止当前工作以收集最新值
+     * buffer 通过缓冲机制分离数据发射与处理，提升取消操作的响应速度‌
+     * onEach { delay(10) } // 添加延迟
+     * conflate() 丢弃中间的数据，仅处理最后一条数据
+     */
+    suspend fun collectLeastData() {
+        flowOf(
+            "一月",
+            "二月",
+            "三月",
+            "亖月",
+            "五月",
+            "陆月",
+            "柒月",
+            "扒月",
+            "玖月",
+            "拾月",
+            "十一月",
+            "十二月"
+        ).buffer(10).onEach { delay(10) }.flowOn(Dispatchers.Default).collectLatest {
+            delay(10)
+            Log.d("MainActivity", "模拟发送数据: $it")
+            delay(10)
+            Log.d("MainActivity", "仅收集最新最后一条数据: $it")
+        }
+    }
+
+    fun test() {
+        GlobalScope.launch {
+            flow<Int> {
+                for (i in 0..2) {
+                    //请注意这里延迟50毫秒是为了对比下面collectLatest的延迟
+                    delay(50)
+                    emit(i)
+                }
+            }.collectLatest {
+                //这里分别延迟了2次50毫秒，是为了表示这个代码块里的耗时，是始终大于上面发送端的。
+                delay(50)
+                Log.e("MainActivity", "模拟正在耗时处理 = $it")
+                delay(50)
+                Log.e("MainActivity", "最终处理完结果 = $it")
             }
         }
     }

@@ -41,6 +41,8 @@ class MainActivity : AppCompatActivity() {
             viewModel.send()
             viewModel.sendList()
             viewModel.sharedIn()
+            viewModel.collectLeastData()
+            viewModel.test()
         }
     }
 }
