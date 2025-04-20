@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.yhsh.flowstudy.viewmodel.HomeModel
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.flow
@@ -11,10 +12,15 @@ import kotlinx.coroutines.launch
 
 /**
  * 检索未使用的资源文件 inspect code
+ *  GlobalScope.launch(){}默认Dispatchers.Default子线程
+ *  viewModelScope.launch(){}默认Dispatchers.Main主线程
+ *  lifecycleScope.launch(){}默认Dispatchers.Main主线程
+ *  MainScope().launch(){}默认Dispatchers.Main主线程
  */
 class MainActivity : AppCompatActivity() {
     private val TAG = this::class.java.simpleName
     private val viewModel: HomeModel by lazy { HomeModel() }
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
