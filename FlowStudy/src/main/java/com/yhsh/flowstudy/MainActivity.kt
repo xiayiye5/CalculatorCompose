@@ -9,6 +9,9 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.channels.onFailure
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import java.util.concurrent.LinkedBlockingDeque
@@ -65,7 +68,24 @@ class MainActivity : AppCompatActivity() {
             LinkedBlockingDeque(10)
         ).asCoroutineDispatcher()
         CoroutineScope(threads).launch {
+            Log.d(TAG, "${Thread.currentThread().name}:自定义线程池的协程线程")
+            callBack()
+        }
+    }
 
+    private suspend fun callBack() {
+        val data = callbackFlow {
+            trySend((1..10).toList()).onFailure {
+                Log.d(TAG, "发送异常：$it")
+            }
+            //主动关闭流,下面的awaitClose方会被调用
+            close()
+            awaitClose {
+                Log.d(TAG, "流被关闭了,可以执行关闭箭头动作了")
+            }
+        }
+        data.collect {
+            Log.d(TAG, "${Thread.currentThread().name}:callbackFlow获取到的数据：$it")
         }
     }
 }
