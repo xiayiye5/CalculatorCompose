@@ -4,11 +4,16 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.yhsh.flowstudy.viewmodel.HomeModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
+import java.util.concurrent.LinkedBlockingDeque
+import java.util.concurrent.ThreadPoolExecutor
+import java.util.concurrent.TimeUnit
 
 /**
  * 检索未使用的资源文件 inspect code
@@ -20,6 +25,7 @@ import kotlinx.coroutines.launch
 class MainActivity : AppCompatActivity() {
     private val TAG = this::class.java.simpleName
     private val viewModel: HomeModel by lazy { HomeModel() }
+
     @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +55,17 @@ class MainActivity : AppCompatActivity() {
             viewModel.sharedIn()
             viewModel.collectLeastData()
             viewModel.test()
+        }
+        //自定义线程池方式设置协程调度器
+        val threads = ThreadPoolExecutor(
+            Runtime.getRuntime().availableProcessors(),
+            6,
+            10,
+            TimeUnit.SECONDS,
+            LinkedBlockingDeque(10)
+        ).asCoroutineDispatcher()
+        CoroutineScope(threads).launch {
+
         }
     }
 }
