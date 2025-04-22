@@ -11,8 +11,12 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.onFailure
+import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.launch
 import java.util.concurrent.LinkedBlockingDeque
 import java.util.concurrent.ThreadPoolExecutor
@@ -70,6 +74,8 @@ class MainActivity : AppCompatActivity() {
         CoroutineScope(threads).launch {
             Log.d(TAG, "${Thread.currentThread().name}:自定义线程池的协程线程")
             callBack()
+            zip()
+            combine()
         }
     }
 
@@ -86,6 +92,25 @@ class MainActivity : AppCompatActivity() {
         }
         data.collect {
             Log.d(TAG, "${Thread.currentThread().name}:callbackFlow获取到的数据：$it")
+        }
+    }
+
+    //合并多个flow,以最短的哪个为准
+    private suspend fun zip() {
+        listOf<String>("胡萝卜", "西红柿").asFlow().zip((0..10).asFlow()) { a, b ->
+            "$b-$a"
+        }.collect {
+            Log.d(TAG, "${Thread.currentThread().name}:打印组合后的数据：$it")
+            //TODO 仅输入前2个 1-胡萝卜 2-西红柿
+        }
+    }
+
+    // 动态组合，任一 Flow 发射新元素时触发 以最长的为准
+    private suspend fun combine() {
+        listOf<String>("胡萝卜", "西红柿").asFlow().combine((0..10).asFlow()) { a, b ->
+            "$b-$a"
+        }.collect {
+            Log.d(TAG, "${Thread.currentThread().name}:打印组合后的数据：$it")
         }
     }
 }
