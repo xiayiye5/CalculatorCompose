@@ -2,18 +2,21 @@ package com.yhsh.flowstudy
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import com.yhsh.flowstudy.bean.PersonRoom
 import com.yhsh.flowstudy.viewmodel.HomeModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.onFailure
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.zip
@@ -32,11 +35,17 @@ import java.util.concurrent.TimeUnit
 class MainActivity : AppCompatActivity() {
     private val TAG = this::class.java.simpleName
     private val viewModel: HomeModel by lazy { HomeModel() }
+    lateinit var etByName: EditText
+    lateinit var etInsertName: EditText
+    lateinit var etInsertAge: EditText
 
     @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        etByName = findViewById(R.id.et_by_name)
+        etInsertName = findViewById(R.id.et_insert_name)
+        etInsertAge = findViewById(R.id.et_insert_age)
         GlobalScope.launch(Dispatchers.Main) {
             val a = flow<Int> {
                 for (i in 0..10) {
@@ -64,19 +73,19 @@ class MainActivity : AppCompatActivity() {
             viewModel.test()
         }
         //自定义线程池方式设置协程调度器
-        val threads = ThreadPoolExecutor(
-            Runtime.getRuntime().availableProcessors(),
-            6,
-            10,
-            TimeUnit.SECONDS,
-            LinkedBlockingDeque(10)
-        ).asCoroutineDispatcher()
-        CoroutineScope(threads).launch {
-            Log.d(TAG, "${Thread.currentThread().name}:自定义线程池的协程线程")
-            callBack()
-            zip()
-            combine()
-        }
+//        val threads = ThreadPoolExecutor(
+//            Runtime.getRuntime().availableProcessors(),
+//            6,
+//            10,
+//            TimeUnit.SECONDS,
+//            LinkedBlockingDeque(10)
+//        ).asCoroutineDispatcher()
+//        CoroutineScope(threads).launch {
+//            Log.d(TAG, "${Thread.currentThread().name}:自定义线程池的协程线程")
+//            callBack()
+//            zip()
+//            combine()
+//        }
     }
 
     private suspend fun callBack() {
@@ -111,6 +120,34 @@ class MainActivity : AppCompatActivity() {
             "$b-$a"
         }.collect {
             Log.d(TAG, "${Thread.currentThread().name}:打印组合后的数据：$it")
+        }
+    }
+
+    fun byName(view: View) {
+        MainScope().launch(Dispatchers.IO) {
+            val queryName = MyDataBase.getDb(applicationContext)?.getPersonRoomDao()
+                ?.getPersonByName(etByName.text.toString().trim())
+            queryName?.forEach {
+                Log.d("MainActivity", "name:${it.name},age:${it.age}")
+            }
+        }
+    }
+
+    fun byAll(view: View) {
+        MainScope().launch(Dispatchers.IO) {
+            val allName = MyDataBase.getDb(applicationContext)?.getPersonRoomDao()?.getAll()
+            allName?.forEach {
+                Log.d("MainActivity", "name:${it.name},age:${it.age}")
+            }
+        }
+    }
+
+    fun insert(view: View) {
+        val name = etInsertName.text.toString().trim()
+        val age = etInsertAge.text.toString().trim()
+        val p = PersonRoom(name, null, age.toInt())
+        MainScope().launch(Dispatchers.IO) {
+            MyDataBase.getDb(applicationContext)?.getPersonRoomDao()?.insertAccount(p)
         }
     }
 }
