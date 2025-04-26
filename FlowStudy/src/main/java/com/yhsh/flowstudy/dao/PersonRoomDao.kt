@@ -13,6 +13,7 @@ interface PersonRoomDao {
     fun getAll(): Flow<List<PersonRoom>>
 
     //根据传入的名称查询 使用:来查询传入的名字
+    //模糊匹配 @Query("select * from PersonDb where account like '%' || :name || '%'")
     @Query("select * from PersonDb where account=:name")
     fun getPersonByName(name: String): Flow<List<PersonRoom>>
 

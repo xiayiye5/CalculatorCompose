@@ -9,5 +9,6 @@ data class PersonRoom(
     @ColumnInfo(name = "account") var name: String,
     //自动增长
     @PrimaryKey(autoGenerate = true) var id: Int? = null,
-    @ColumnInfo(name = "xuehao") var age: Int
+    @ColumnInfo(name = "xuehao") var age: Int,
+    @ColumnInfo(name = "address") var address: String
 )

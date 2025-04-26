@@ -1,6 +1,7 @@
 package com.yhsh.flowstudy
 
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.widget.EditText
@@ -40,6 +41,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var etByName: EditText
     lateinit var etInsertName: EditText
     lateinit var etInsertAge: EditText
+    lateinit var etInsertAddress: EditText
 
     @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,6 +50,7 @@ class MainActivity : AppCompatActivity() {
         etByName = findViewById(R.id.et_by_name)
         etInsertName = findViewById(R.id.et_insert_name)
         etInsertAge = findViewById(R.id.et_insert_age)
+        etInsertAddress = findViewById(R.id.et_insert_address)
         GlobalScope.launch(Dispatchers.Main) {
             val a = flow<Int> {
                 for (i in 0..10) {
@@ -131,7 +134,7 @@ class MainActivity : AppCompatActivity() {
                 ?.getPersonByName(etByName.text.toString().trim())
             queryName?.collect { person ->
                 person.forEach {
-                    Log.d("MainActivity", "通过名字查询 name:${it.name},age:${it.age}")
+                    Log.d(TAG, "通过名字查询 name:${it.name},age:${it.age},address:${it.address}")
                 }
             }
 //            queryName?.forEach {
@@ -145,16 +148,20 @@ class MainActivity : AppCompatActivity() {
             val allName = MyDataBase.getDb(applicationContext)?.getPersonRoomDao()?.getAll()
             allName?.collect { person ->
                 person.forEach {
-                    Log.d("MainActivity", "查询所有用户 name:${it.name},age:${it.age}")
+                    Log.d(TAG, "查询所有用户 name:${it.name},age:${it.age},address:${it.address}")
                 }
             }
         }
     }
 
     fun insert(view: View) {
-        val name = etInsertName.text.toString().trim()
-        val age = etInsertAge.text.toString().trim()
-        val p = PersonRoom(name, null, age.toInt())
+        var name = etInsertName.text.toString().trim()
+        var age = etInsertAge.text.toString().trim()
+        var address = etInsertAddress.text.toString().trim()
+        name = if (TextUtils.isEmpty(name)) "名字未知" else name
+        age = if (TextUtils.isEmpty(age)) "0" else age
+        address = if (TextUtils.isEmpty(address)) "地址未知" else age
+        val p = PersonRoom(name, null, age.toInt(), address)
         MainScope().launch(Dispatchers.IO) {
             MyDataBase.getDb(applicationContext)?.getPersonRoomDao()?.insertAccount(p)
         }

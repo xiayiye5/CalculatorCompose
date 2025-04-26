@@ -46,6 +46,12 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/et_insert_name" />
 
+    <EditText
+        android:id="@+id/et_insert_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/et_insert_age" />
+
     <Button
         android:id="@+id/btInsert"
         android:layout_width="wrap_content"
@@ -54,5 +60,5 @@
         android:text="新增用户"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_insert_age" />
+        app:layout_constraintTop_toBottomOf="@+id/et_insert_address" />
 </androidx.constraintlayout.widget.ConstraintLayout>
