@@ -17,8 +17,10 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.onFailure
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.launch
 import java.util.concurrent.LinkedBlockingDeque
@@ -127,17 +129,24 @@ class MainActivity : AppCompatActivity() {
         MainScope().launch(Dispatchers.IO) {
             val queryName = MyDataBase.getDb(applicationContext)?.getPersonRoomDao()
                 ?.getPersonByName(etByName.text.toString().trim())
-            queryName?.forEach {
-                Log.d("MainActivity", "name:${it.name},age:${it.age}")
+            queryName?.collect { person ->
+                person.forEach {
+                    Log.d("MainActivity", "通过名字查询 name:${it.name},age:${it.age}")
+                }
             }
+//            queryName?.forEach {
+//                Log.d("MainActivity", "name:${it.name},age:${it.age}")
+//            }
         }
     }
 
     fun byAll(view: View) {
         MainScope().launch(Dispatchers.IO) {
             val allName = MyDataBase.getDb(applicationContext)?.getPersonRoomDao()?.getAll()
-            allName?.forEach {
-                Log.d("MainActivity", "name:${it.name},age:${it.age}")
+            allName?.collect { person ->
+                person.forEach {
+                    Log.d("MainActivity", "查询所有用户 name:${it.name},age:${it.age}")
+                }
             }
         }
     }
