@@ -4,29 +4,28 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.EditText
+import android.widget.Spinner
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.get
+import androidx.lifecycle.MutableLiveData
 import com.yhsh.flowstudy.bean.PersonRoom
 import com.yhsh.flowstudy.viewmodel.HomeModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.onFailure
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.launch
-import java.util.concurrent.LinkedBlockingDeque
-import java.util.concurrent.ThreadPoolExecutor
-import java.util.concurrent.TimeUnit
 
 /**
  * 检索未使用的资源文件 inspect code
@@ -42,6 +41,9 @@ class MainActivity : AppCompatActivity() {
     lateinit var etInsertName: EditText
     lateinit var etInsertAge: EditText
     lateinit var etInsertAddress: EditText
+    lateinit var spDeletePerson: Spinner
+    val ld = MutableLiveData<ArrayList<String>>()
+    var list: ArrayList<String> = ArrayList<String>()
 
     @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,6 +53,7 @@ class MainActivity : AppCompatActivity() {
         etInsertName = findViewById(R.id.et_insert_name)
         etInsertAge = findViewById(R.id.et_insert_age)
         etInsertAddress = findViewById(R.id.et_insert_address)
+        spDeletePerson = findViewById(R.id.sp_delete_person)
         GlobalScope.launch(Dispatchers.Main) {
             val a = flow<Int> {
                 for (i in 0..10) {
@@ -91,6 +94,33 @@ class MainActivity : AppCompatActivity() {
 //            zip()
 //            combine()
 //        }
+        val dynamicAdapter = ArrayAdapter(
+            this, android.R.layout.simple_spinner_item, list
+        ).apply {
+            setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        }
+        ld.observe(this) {
+            this.list = it
+            dynamicAdapter.notifyDataSetChanged()
+        }
+        // 设置适配器
+        spDeletePerson.adapter = dynamicAdapter
+
+        // 设置选择监听
+        spDeletePerson.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>, view: View?, position: Int, id: Long
+            ) {
+                val selectedItem = parent.getItemAtPosition(position).toString()
+                Toast.makeText(
+                    this@MainActivity, "Selected: $selectedItem", Toast.LENGTH_SHORT
+                ).show()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // 无操作
+            }
+        }
     }
 
     private suspend fun callBack() {
@@ -148,8 +178,10 @@ class MainActivity : AppCompatActivity() {
             val allName = MyDataBase.getDb(applicationContext)?.getPersonRoomDao()?.getAll()
             allName?.collect { person ->
                 person.forEach {
-                    Log.d(TAG, "查询所有用户 name:${it.name},age:${it.age},address:${it.address}")
+                    Log.d(TAG, "所有 id:${it.id},name:${it.name},age:${it.age},ads:${it.address}")
+                    list.add(it.name)
                 }
+                ld.postValue(list)
             }
         }
     }
@@ -164,6 +196,14 @@ class MainActivity : AppCompatActivity() {
         val p = PersonRoom(name, null, age.toInt(), address)
         MainScope().launch(Dispatchers.IO) {
             MyDataBase.getDb(applicationContext)?.getPersonRoomDao()?.insertAccount(p)
+        }
+    }
+
+    fun deletePerson(view: View) {
+//        val person = spDeletePerson[0]
+//        if (TextUtils.isEmpty(person)) return
+        MainScope().launch(Dispatchers.IO) {
+            MyDataBase.getDb(applicationContext)?.getPersonRoomDao()?.deleteId(12)
         }
     }
 }
