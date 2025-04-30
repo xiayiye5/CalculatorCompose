@@ -1,6 +1,7 @@
 package com.yhsh.flowstudy.dao
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import com.yhsh.flowstudy.bean.PersonRoom
@@ -20,4 +21,24 @@ interface PersonRoomDao {
     //插入数据
     @Insert
     fun insertAccount(p: PersonRoom)
+
+    //删除单条数据
+    @Query("DELETE FROM PersonDb WHERE id = :personId")
+    fun deleteId(personId: Int)
+
+    //删除指定集合数据
+    @Query("DELETE FROM PersonDb WHERE id IN (:ids)")
+    fun deleteIds(ids: List<Int>)
+
+    // 使用 @Delete 删除实体对象（必须传入完整对象）
+    // --------------------------------------------------
+    @Delete
+    fun deletePerson(p: PersonRoom)  // 单条删除
+
+    @Delete
+    fun deletePersons(persons: List<PersonRoom>)  // 批量删除对象
+
+    //清空所有数据
+    @Query("DELETE FROM PersonDb")
+    fun clear()
 }

@@ -10,7 +10,6 @@ import android.widget.EditText
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.get
 import androidx.lifecycle.MutableLiveData
 import com.yhsh.flowstudy.bean.PersonRoom
 import com.yhsh.flowstudy.viewmodel.HomeModel
@@ -44,6 +43,8 @@ class MainActivity : AppCompatActivity() {
     lateinit var spDeletePerson: Spinner
     val ld = MutableLiveData<ArrayList<String>>()
     var list: ArrayList<String> = ArrayList<String>()
+    var listPerson: List<PersonRoom> = ArrayList()
+    var deletePerson: PersonRoom? = null
 
     @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -101,6 +102,8 @@ class MainActivity : AppCompatActivity() {
         }
         ld.observe(this) {
             this.list = it
+            //刷新了列表数据
+            Log.d(TAG, "刷新了列表数据………………${it.size}")
             dynamicAdapter.notifyDataSetChanged()
         }
         // 设置适配器
@@ -115,6 +118,7 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(
                     this@MainActivity, "Selected: $selectedItem", Toast.LENGTH_SHORT
                 ).show()
+                deletePerson = listPerson[position]
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
@@ -177,10 +181,12 @@ class MainActivity : AppCompatActivity() {
         MainScope().launch(Dispatchers.IO) {
             val allName = MyDataBase.getDb(applicationContext)?.getPersonRoomDao()?.getAll()
             allName?.collect { person ->
+                list.clear()
                 person.forEach {
                     Log.d(TAG, "所有 id:${it.id},name:${it.name},age:${it.age},ads:${it.address}")
                     list.add(it.name)
                 }
+                listPerson = person
                 ld.postValue(list)
             }
         }
@@ -200,10 +206,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun deletePerson(view: View) {
-//        val person = spDeletePerson[0]
-//        if (TextUtils.isEmpty(person)) return
-        MainScope().launch(Dispatchers.IO) {
-            MyDataBase.getDb(applicationContext)?.getPersonRoomDao()?.deleteId(12)
+        deletePerson?.let {
+            MainScope().launch(Dispatchers.IO) {
+                //删除方式一
+//                MyDataBase.getDb(applicationContext)?.getPersonRoomDao()?.deletePerson(it)
+                it.id?.let { personId ->
+                    Log.d(TAG, "删除了${it.name} ${it.id}")
+                    //删除方式二
+                    MyDataBase.getDb(applicationContext)?.getPersonRoomDao()?.deleteId(personId)
+                }
+            }
         }
     }
 }
