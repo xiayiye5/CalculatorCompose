@@ -136,6 +136,8 @@ public class FlowLayout extends ViewGroup {
     }
 
     private void setUpChildren() {
+        //设置数据之前先移除
+        removeAllViews();
         for (String mDatum : mData) {
 //            TextView view = new TextView(getContext());
             TextView view = (TextView) LayoutInflater.from(getContext()).inflate(R.layout.item_flow_text, this, false);
