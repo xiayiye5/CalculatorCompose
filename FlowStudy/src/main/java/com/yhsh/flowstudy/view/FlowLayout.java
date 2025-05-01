@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -137,7 +138,8 @@ public class FlowLayout extends ViewGroup {
 
     private void setUpChildren() {
         for (String mDatum : mData) {
-            TextView view = new TextView(getContext());
+//            TextView view = new TextView(getContext());
+            TextView view = (TextView) LayoutInflater.from(getContext()).inflate(R.layout.item_flow_text, this, false);
             view.setText(mDatum);
             //添加元素到父布局
             addView(view);
@@ -193,6 +195,7 @@ public class FlowLayout extends ViewGroup {
         //根据所有尺寸计算行高,每个view的高度是一样的，获取第一个view的高度即可
         View child = getChildAt(0);
         int measuredChildHeight = child.getMeasuredHeight();
+        Log.d(TAG, "measuredChildHeight:" + measuredChildHeight);
         //父布局的高度 = child高度 x 行高
         int parentMeasuredHeight = measuredChildHeight * mLines.size();
         //测量自己，设置父布局的宽度和高度
@@ -234,8 +237,9 @@ public class FlowLayout extends ViewGroup {
             currentLeft = 0;
             currentRight = 0;
             currentBottom += firstChild.getMeasuredHeight();
-            //从第二行开始top坐标需要改变
-            currentTop = firstChild.getMeasuredHeight();
+            //从第二行开始top坐标需要改变,每增加一行需要累加之前的top
+            currentTop += firstChild.getMeasuredHeight();
+            Log.d(TAG, "currentTop:" + currentTop);
         }
     }
 }

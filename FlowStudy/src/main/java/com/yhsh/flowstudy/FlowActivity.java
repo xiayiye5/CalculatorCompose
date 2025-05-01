@@ -29,7 +29,14 @@ public class FlowActivity extends AppCompatActivity {
         list.add("最强无战事之东兴刘龙");
         list.add("赵谦孙俪王二麻子");
         list.add("三角形");
-        list.add("正方向");
+        list.add("的身份和大家开始广泛但是");
+        list.add("地方都是");
+        list.add("而侮辱额外");
+        list.add("a对方的");
+        list.add("a芬兰的南方");
+        list.add("法国进口");
+        list.add("w如同家人看");
+        list.add("少女你是");
         fw.setTextList(list);
     }
 }
