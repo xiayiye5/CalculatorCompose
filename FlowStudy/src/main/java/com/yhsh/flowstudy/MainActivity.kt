@@ -1,5 +1,6 @@
 package com.yhsh.flowstudy
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -217,5 +218,9 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    fun flowLayout(view: View) {
+        startActivity(Intent(this, FlowActivity::class.java))
     }
 }
