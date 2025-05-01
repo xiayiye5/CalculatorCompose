@@ -37,6 +37,10 @@ public class FlowActivity extends AppCompatActivity {
         list.add("法国进口");
         list.add("w如同家人看");
         list.add("少女你是");
+        list.add("飞机爱德华");
+        list.add("s东方国家的司空见惯");
+        list.add("的攻击方式领导给老师的两个");
+        list.add("d分公司的");
         fw.setTextList(list);
     }
 }

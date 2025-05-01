@@ -29,7 +29,6 @@ public class FlowLayout extends ViewGroup {
     //行数的集合
     private final List<List<View>> mLines = new ArrayList<>();
     //每行里面存放的对象数据
-    List<View> line = new ArrayList<>();
     private int maxLines;
     private float itemHorizontalMargin;
     private float itemVerticalMargin;
@@ -159,13 +158,17 @@ public class FlowLayout extends ViewGroup {
         Log.d(TAG, "UNSPECIFIED:" + MeasureSpec.UNSPECIFIED);
         //测量孩子
         int childCount = getChildCount();
-        //创建子布局的测量模式:可以无限大，但是不能超过父类的宽高
-        int childrenWidthMeasureSpec = MeasureSpec.makeMeasureSpec(parentSizeWidth, MeasureSpec.AT_MOST);
-        int childrenHeightMeasureSpec = MeasureSpec.makeMeasureSpec(parentSizeHeight, MeasureSpec.AT_MOST);
+        Log.d(TAG, "getChildCount:" + childCount);
         //未添加任何子控件直接不测了
         if (childCount <= 0) return;
         //清空集合
         mLines.clear();
+        List<View> line = new ArrayList<>();
+        //添加默认第一行
+        mLines.add(line);
+        //创建子布局的测量模式:可以无限大，但是不能超过父类的宽高
+        int childrenWidthMeasureSpec = MeasureSpec.makeMeasureSpec(parentSizeWidth, MeasureSpec.AT_MOST);
+        int childrenHeightMeasureSpec = MeasureSpec.makeMeasureSpec(parentSizeHeight, MeasureSpec.AT_MOST);
         //循环获取每个children并且测量
         for (int i = 0; i < childCount; i++) {
             View child = getChildAt(i);
@@ -186,11 +189,13 @@ public class FlowLayout extends ViewGroup {
                 } else {
                     //TODO 未知原因，待研究
                     line = new ArrayList<>();
+                    //末尾无法添加，换行后需要添加到line中
+                    line.add(child);
                     //换行，添加一行
                     mLines.add(line);
                 }
             }
-
+            Log.d(TAG, "打印行高和每行个数：" + mLines.size() + "--" + line.size());
         }
         //根据所有尺寸计算行高,每个view的高度是一样的，获取第一个view的高度即可
         View child = getChildAt(0);
@@ -222,6 +227,7 @@ public class FlowLayout extends ViewGroup {
         int currentTop = 0;
         int currentRight = 0;
         int currentBottom = firstChild.getMeasuredHeight();
+        Log.d(TAG, "打印行数:" + mLines.size());
         for (List<View> mLine : mLines) {
             for (View view : mLine) {
                 //每一行
