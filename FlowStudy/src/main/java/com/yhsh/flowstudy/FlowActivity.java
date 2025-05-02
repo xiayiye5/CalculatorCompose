@@ -26,6 +26,7 @@ public class FlowActivity extends AppCompatActivity {
     public static final String TAG = "FlowActivity";
     private List<String> list;
     private FlowLayout fw;
+    private List<SearchKeyWorld> allHistory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,11 +64,21 @@ public class FlowActivity extends AppCompatActivity {
         fw.setTextList(list);
         //查询所有数据
         queryHistoryList(fw, list);
+        //设置每个item的点击事件
+        fw.setOnItemClickHistory(data -> {
+            if (allHistory.isEmpty()) {
+                Log.d(TAG, "暂无历史记录:data=" + data);
+                return;
+            }
+            //根据点击的哪一个从数据库删除
+            SearchKeyWorld searchKeyWorld = allHistory.get((int) data);
+            Log.d(TAG, "点击删除的是：" + searchKeyWorld.getKeyWorld());
+        });
     }
 
     private void queryHistoryList(FlowLayout fw, List<String> list) {
         Executors.newFixedThreadPool(3).submit(() -> {
-            List<SearchKeyWorld> allHistory = historyDao.getAllHistory();
+            allHistory = historyDao.getAllHistory();
             runOnUiThread(() -> {
                 //添加之前先清空
                 list.clear();

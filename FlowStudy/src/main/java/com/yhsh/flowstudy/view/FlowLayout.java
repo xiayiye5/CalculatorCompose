@@ -36,6 +36,17 @@ public class FlowLayout extends ViewGroup {
     private float textColor;
     private float borderColor;
     private float borderRadius;
+
+    public interface OnItemClickHistory {
+        void OnClick(Object data);
+    }
+
+    private OnItemClickHistory onItemClickHistory;
+
+    public void setOnItemClickHistory(OnItemClickHistory onItemClickHistory) {
+        this.onItemClickHistory = onItemClickHistory;
+    }
+
     private final List<String> mData = new ArrayList<>();
 
     public int getMaxLines() {
@@ -138,12 +149,15 @@ public class FlowLayout extends ViewGroup {
     private void setUpChildren() {
         //设置数据之前先移除
         removeAllViews();
-        for (String mDatum : mData) {
+        for (int i = 0; i < mData.size(); i++) {
 //            TextView view = new TextView(getContext());
             TextView view = (TextView) LayoutInflater.from(getContext()).inflate(R.layout.item_flow_text, this, false);
-            view.setText(mDatum);
+            view.setText(mData.get(i));
             //添加元素到父布局
             addView(view);
+            //设置点击事件
+            int finalI = i;
+            view.setOnClickListener(view1 -> onItemClickHistory.OnClick(finalI));
         }
     }
 
