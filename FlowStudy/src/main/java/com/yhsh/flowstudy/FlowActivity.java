@@ -63,7 +63,7 @@ public class FlowActivity extends AppCompatActivity {
 //        list.add("d分公司的");
         fw.setTextList(list);
         //查询所有数据
-        queryHistoryList(fw, list);
+        queryHistoryList(fw);
         //设置每个item的点击事件
         fw.setOnItemClickHistory(data -> {
             if (allHistory.isEmpty()) {
@@ -73,10 +73,16 @@ public class FlowActivity extends AppCompatActivity {
             //根据点击的哪一个从数据库删除
             SearchKeyWorld searchKeyWorld = allHistory.get((int) data);
             Log.d(TAG, "点击删除的是：" + searchKeyWorld.getKeyWorld());
+            //点击删除历史记录
+            Executors.newFixedThreadPool(3).submit(() -> {
+                historyDao.delete(searchKeyWorld);
+                //查询最新
+                queryHistoryList(fw);
+            });
         });
     }
 
-    private void queryHistoryList(FlowLayout fw, List<String> list) {
+    private void queryHistoryList(FlowLayout fw) {
         Executors.newFixedThreadPool(3).submit(() -> {
             allHistory = historyDao.getAllHistory();
             runOnUiThread(() -> {
@@ -101,7 +107,7 @@ public class FlowActivity extends AppCompatActivity {
             historyDao.insertHistory(key);
             Log.d(TAG, "新增历史记录：" + key.getKeyWorld());
             //查询最新列表
-            queryHistoryList(fw, list);
+            queryHistoryList(fw);
         });
     }
 }
