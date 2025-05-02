@@ -224,6 +224,10 @@ public class FlowLayout extends ViewGroup {
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        if (getChildCount() <= 0) {
+            //未添加子item直接return
+            return;
+        }
         View firstChild = getChildAt(0);
         int currentLeft = 0;
         int currentTop = 0;
