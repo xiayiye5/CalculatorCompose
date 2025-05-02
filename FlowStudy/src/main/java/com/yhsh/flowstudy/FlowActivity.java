@@ -63,7 +63,7 @@ public class FlowActivity extends AppCompatActivity {
 //        list.add("d分公司的");
         fw.setTextList(list);
         //查询所有数据
-        queryHistoryList(fw);
+        queryHistoryList();
         //设置每个item的点击事件
         fw.setOnItemClickHistory(data -> {
             if (allHistory.isEmpty()) {
@@ -77,12 +77,12 @@ public class FlowActivity extends AppCompatActivity {
             Executors.newFixedThreadPool(3).submit(() -> {
                 historyDao.delete(searchKeyWorld);
                 //查询最新
-                queryHistoryList(fw);
+                queryHistoryList();
             });
         });
     }
 
-    private void queryHistoryList(FlowLayout fw) {
+    private void queryHistoryList() {
         Executors.newFixedThreadPool(3).submit(() -> {
             allHistory = historyDao.getAllHistory();
             runOnUiThread(() -> {
@@ -107,7 +107,7 @@ public class FlowActivity extends AppCompatActivity {
             historyDao.insertHistory(key);
             Log.d(TAG, "新增历史记录：" + key.getKeyWorld());
             //查询最新列表
-            queryHistoryList(fw);
+            queryHistoryList();
         });
     }
 }
