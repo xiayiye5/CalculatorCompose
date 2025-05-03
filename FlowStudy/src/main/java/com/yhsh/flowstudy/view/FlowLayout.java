@@ -259,6 +259,10 @@ public class FlowLayout extends ViewGroup {
                 int childWidth = view.getMeasuredWidth();
 //                int childHeight = view.getMeasuredHeight(); 还需要增加水平间距
                 currentRight += childWidth + (int) itemHorizontalMargin;
+                //一行只有一个item并且超过最大长度的时候设置最大宽度为父布局的最大宽度
+                if (currentRight > getMeasuredWidth() - itemHorizontalMargin) {
+                    currentRight = getMeasuredWidth() - (int) itemHorizontalMargin;
+                }
 //                currentBottom = childHeight;
                 view.layout(currentLeft, currentTop, currentRight, currentBottom);
                 //从第二个开始left坐标需要变化 +边距
