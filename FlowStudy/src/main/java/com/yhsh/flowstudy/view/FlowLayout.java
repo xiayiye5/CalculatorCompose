@@ -31,8 +31,8 @@ public class FlowLayout extends ViewGroup {
     private final List<List<View>> mLines = new ArrayList<>();
     //每行里面存放的对象数据
     private int maxLines;
-    private float itemHorizontalMargin;
-    private float itemVerticalMargin;
+    private int itemHorizontalMargin;
+    private int itemVerticalMargin;
     private float textMaxLength;
     private float textColor;
     private float borderColor;
@@ -62,16 +62,16 @@ public class FlowLayout extends ViewGroup {
         return itemHorizontalMargin;
     }
 
-    public void setItemHorizontalMargin(float itemHorizontalMargin) {
-        this.itemHorizontalMargin = itemHorizontalMargin;
+    public void setItemHorizontalMargin(int itemHorizontalMargin) {
+        this.itemHorizontalMargin = SizeUtils.dip2px(itemHorizontalMargin);
     }
 
     public float getItemVerticalMargin() {
         return itemVerticalMargin;
     }
 
-    public void setItemVerticalMargin(float itemVerticalMargin) {
-        this.itemVerticalMargin = itemVerticalMargin;
+    public void setItemVerticalMargin(int itemVerticalMargin) {
+        this.itemVerticalMargin = SizeUtils.dip2px(itemVerticalMargin);
     }
 
     public float getTextMaxLength() {
@@ -122,8 +122,8 @@ public class FlowLayout extends ViewGroup {
         super(context, attrs, defStyleAttr, defStyleRes);
         TypedArray type = context.obtainStyledAttributes(attrs, R.styleable.FlowLayout);
         maxLines = type.getInt(R.styleable.FlowLayout_maxLines, DEFAULT_LINES);
-        itemHorizontalMargin = type.getDimension(R.styleable.FlowLayout_itemHorizontalMargin, DEFAULT_HORIZONTAL_MARGIN);
-        itemVerticalMargin = type.getDimension(R.styleable.FlowLayout_itemVerticalMargin, DEFAULT_VERTICAL_MARGIN);
+        itemHorizontalMargin = (int) type.getDimension(R.styleable.FlowLayout_itemHorizontalMargin, DEFAULT_HORIZONTAL_MARGIN);
+        itemVerticalMargin = (int) type.getDimension(R.styleable.FlowLayout_itemVerticalMargin, DEFAULT_VERTICAL_MARGIN);
         textMaxLength = type.getInt(R.styleable.FlowLayout_textMaxLength, DEFAULT_TEXT_MAX_LENGTH);
         textColor = type.getColor(R.styleable.FlowLayout_textColor, ContextCompat.getColor(getContext(), R.color.black));
         borderColor = type.getColor(R.styleable.FlowLayout_borderColor, ContextCompat.getColor(getContext(), R.color.black));
@@ -219,7 +219,7 @@ public class FlowLayout extends ViewGroup {
         int measuredChildHeight = child.getMeasuredHeight();
         Log.d(TAG, "measuredChildHeight:" + measuredChildHeight);
         //父布局的高度 = child高度 x 行高 +上下间距 例如3行，就有4个间距所以需要+1
-        int parentMeasuredHeight = measuredChildHeight * mLines.size() + (mLines.size() + 1) * (int) itemVerticalMargin;
+        int parentMeasuredHeight = measuredChildHeight * mLines.size() + (mLines.size() + 1) * itemVerticalMargin;
         //测量自己，设置父布局的宽度和高度
         setMeasuredDimension(parentSizeWidth, parentMeasuredHeight);
     }
@@ -228,7 +228,7 @@ public class FlowLayout extends ViewGroup {
         //判断当前行的宽度是否大于父布局宽度
         int childrenWidth = child.getMeasuredWidth();
         //默认设置FlowLayout左边的间距
-        int totalWidth = (int) itemHorizontalMargin;
+        int totalWidth = itemHorizontalMargin;
         for (View view : line) {
             //计算当前行已添加View的宽度 +边距
             totalWidth += view.getMeasuredWidth() + itemHorizontalMargin;
@@ -246,35 +246,35 @@ public class FlowLayout extends ViewGroup {
         }
         View firstChild = getChildAt(0);
         //默认设置FlowLayout左边的间距
-        int currentLeft = (int) itemHorizontalMargin;
+        int currentLeft = itemHorizontalMargin;
         //第一个top坐标默认就是上下间距
-        int currentTop = (int) itemVerticalMargin;
+        int currentTop = itemVerticalMargin;
         int currentRight = 0;
         //第一个bottom坐标默认也需要添加上下间距
-        int currentBottom = firstChild.getMeasuredHeight() + (int) itemVerticalMargin;
+        int currentBottom = firstChild.getMeasuredHeight() + itemVerticalMargin;
         Log.d(TAG, "打印行数:" + mLines.size());
         for (List<View> mLine : mLines) {
             for (View view : mLine) {
                 //每一行
                 int childWidth = view.getMeasuredWidth();
 //                int childHeight = view.getMeasuredHeight(); 还需要增加水平间距
-                currentRight += childWidth + (int) itemHorizontalMargin;
+                currentRight += childWidth + itemHorizontalMargin;
                 //一行只有一个item并且超过最大长度的时候设置最大宽度为父布局的最大宽度
                 if (currentRight > getMeasuredWidth() - itemHorizontalMargin) {
-                    currentRight = getMeasuredWidth() - (int) itemHorizontalMargin;
+                    currentRight = getMeasuredWidth() - itemHorizontalMargin;
                 }
 //                currentBottom = childHeight;
                 view.layout(currentLeft, currentTop, currentRight, currentBottom);
                 //从第二个开始left坐标需要变化 +边距
-                currentLeft = currentRight + (int) itemHorizontalMargin;
+                currentLeft = currentRight + itemHorizontalMargin;
             }
             //清零 //默认设置FlowLayout左边的间距
-            currentLeft = (int) itemHorizontalMargin;
+            currentLeft = itemHorizontalMargin;
             currentRight = 0;
             //换行的时候bottom也需要添加一个间距
-            currentBottom += firstChild.getMeasuredHeight() + (int) itemVerticalMargin;
+            currentBottom += firstChild.getMeasuredHeight() + itemVerticalMargin;
             //从第二行开始top坐标需要改变,每增加一行需要累加之前的top 换行的时候top也需要添加一个间距
-            currentTop += firstChild.getMeasuredHeight() + (int) itemVerticalMargin;
+            currentTop += firstChild.getMeasuredHeight() + itemVerticalMargin;
             Log.d(TAG, "currentTop:" + currentTop);
         }
     }
