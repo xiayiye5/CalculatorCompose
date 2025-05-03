@@ -80,6 +80,8 @@ public class FlowActivity extends AppCompatActivity {
                 queryHistoryList();
             });
         });
+        //动态设置最大行数
+//        fw.setMaxLines(5);
     }
 
     private void queryHistoryList() {

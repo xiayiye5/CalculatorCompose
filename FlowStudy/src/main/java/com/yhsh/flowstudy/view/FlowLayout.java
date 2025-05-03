@@ -122,6 +122,9 @@ public class FlowLayout extends ViewGroup {
         super(context, attrs, defStyleAttr, defStyleRes);
         TypedArray type = context.obtainStyledAttributes(attrs, R.styleable.FlowLayout);
         maxLines = type.getInt(R.styleable.FlowLayout_maxLines, DEFAULT_LINES);
+        if (maxLines < 1) {
+            throw new IllegalArgumentException("自定义属性maxLines最大行数不能小于1");
+        }
         itemHorizontalMargin = (int) type.getDimension(R.styleable.FlowLayout_itemHorizontalMargin, DEFAULT_HORIZONTAL_MARGIN);
         itemVerticalMargin = (int) type.getDimension(R.styleable.FlowLayout_itemVerticalMargin, DEFAULT_VERTICAL_MARGIN);
         textMaxLength = type.getInt(R.styleable.FlowLayout_textMaxLength, DEFAULT_TEXT_MAX_LENGTH);
@@ -204,6 +207,10 @@ public class FlowLayout extends ViewGroup {
                     //继续添加children
                     line.add(child);
                 } else {
+                    if (mLines.size() >= maxLines) {
+                        //大于最大行数时，跳出本次循环不再添加行数
+                        break;
+                    }
                     //TODO 未知原因，待研究
                     line = new ArrayList<>();
                     //末尾无法添加，换行后需要添加到line中

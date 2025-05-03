@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".FlowActivity">
 
@@ -22,6 +23,7 @@
     <!--此处FlowLayout设置的高度无效，因为再自定义中代码动态设置了高度为子布局的行高-->
     <com.yhsh.flowstudy.view.FlowLayout
         android:id="@+id/fw_layout"
+        app:maxLines="10"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </LinearLayout>
