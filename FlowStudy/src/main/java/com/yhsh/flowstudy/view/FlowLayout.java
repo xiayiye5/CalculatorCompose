@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.core.content.ContextCompat;
 
 import com.yhsh.flowstudy.R;
+import com.yhsh.flowstudy.kit.SizeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,9 +23,9 @@ import java.util.List;
 public class FlowLayout extends ViewGroup {
     private static final int DEFAULT_LINES = 3;
     private static final String TAG = "FlowLayout";
-    private static final int DEFAULT_HORIZONTAL_MARGIN = 5;
-    private static final int DEFAULT_VERTICAL_MARGIN = 5;
-    private static final int DEFAULT_BORDER_RADIUS = 5;
+    private static final int DEFAULT_HORIZONTAL_MARGIN = SizeUtils.dip2px(5);
+    private static final int DEFAULT_VERTICAL_MARGIN = SizeUtils.dip2px(5);
+    private static final int DEFAULT_BORDER_RADIUS = SizeUtils.dip2px(5);
     private static final int DEFAULT_TEXT_MAX_LENGTH = 20;
     //行数的集合
     private final List<List<View>> mLines = new ArrayList<>();
@@ -217,8 +218,8 @@ public class FlowLayout extends ViewGroup {
         View child = getChildAt(0);
         int measuredChildHeight = child.getMeasuredHeight();
         Log.d(TAG, "measuredChildHeight:" + measuredChildHeight);
-        //父布局的高度 = child高度 x 行高
-        int parentMeasuredHeight = measuredChildHeight * mLines.size();
+        //父布局的高度 = child高度 x 行高 +上下间距 例如3行，就有4个间距所以需要+1
+        int parentMeasuredHeight = measuredChildHeight * mLines.size() + (mLines.size() + 1) * (int) itemVerticalMargin;
         //测量自己，设置父布局的宽度和高度
         setMeasuredDimension(parentSizeWidth, parentMeasuredHeight);
     }
@@ -226,13 +227,14 @@ public class FlowLayout extends ViewGroup {
     private boolean checkChildrenCanBeAdd(List<View> line, View child, int parentSizeWidth) {
         //判断当前行的宽度是否大于父布局宽度
         int childrenWidth = child.getMeasuredWidth();
-        int totalWidth = 0;
+        //默认设置FlowLayout左边的间距
+        int totalWidth = (int) itemHorizontalMargin;
         for (View view : line) {
-            //计算当前行已添加View的宽度
-            totalWidth += view.getMeasuredWidth();
+            //计算当前行已添加View的宽度 +边距
+            totalWidth += view.getMeasuredWidth() + itemHorizontalMargin;
         }
-        //再加上需要添加的view的宽度来判断是否大于父布局的宽度
-        totalWidth += childrenWidth;
+        //再加上需要添加的view的宽度来判断是否大于父布局的宽度,+边距
+        totalWidth += childrenWidth + itemHorizontalMargin;
         return totalWidth <= parentSizeWidth;
     }
 
@@ -243,28 +245,32 @@ public class FlowLayout extends ViewGroup {
             return;
         }
         View firstChild = getChildAt(0);
-        int currentLeft = 0;
-        int currentTop = 0;
+        //默认设置FlowLayout左边的间距
+        int currentLeft = (int) itemHorizontalMargin;
+        //第一个top坐标默认就是上下间距
+        int currentTop = (int) itemVerticalMargin;
         int currentRight = 0;
-        int currentBottom = firstChild.getMeasuredHeight();
+        //第一个bottom坐标默认也需要添加上下间距
+        int currentBottom = firstChild.getMeasuredHeight() + (int) itemVerticalMargin;
         Log.d(TAG, "打印行数:" + mLines.size());
         for (List<View> mLine : mLines) {
             for (View view : mLine) {
                 //每一行
                 int childWidth = view.getMeasuredWidth();
-//                int childHeight = view.getMeasuredHeight();
-                currentRight += childWidth;
+//                int childHeight = view.getMeasuredHeight(); 还需要增加水平间距
+                currentRight += childWidth + (int) itemHorizontalMargin;
 //                currentBottom = childHeight;
                 view.layout(currentLeft, currentTop, currentRight, currentBottom);
-                //从第二个开始left坐标需要变化
-                currentLeft = currentRight;
+                //从第二个开始left坐标需要变化 +边距
+                currentLeft = currentRight + (int) itemHorizontalMargin;
             }
-            //清零
-            currentLeft = 0;
+            //清零 //默认设置FlowLayout左边的间距
+            currentLeft = (int) itemHorizontalMargin;
             currentRight = 0;
-            currentBottom += firstChild.getMeasuredHeight();
-            //从第二行开始top坐标需要改变,每增加一行需要累加之前的top
-            currentTop += firstChild.getMeasuredHeight();
+            //换行的时候bottom也需要添加一个间距
+            currentBottom += firstChild.getMeasuredHeight() + (int) itemVerticalMargin;
+            //从第二行开始top坐标需要改变,每增加一行需要累加之前的top 换行的时候top也需要添加一个间距
+            currentTop += firstChild.getMeasuredHeight() + (int) itemVerticalMargin;
             Log.d(TAG, "currentTop:" + currentTop);
         }
     }
