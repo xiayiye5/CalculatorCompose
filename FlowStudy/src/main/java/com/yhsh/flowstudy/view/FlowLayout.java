@@ -2,6 +2,7 @@ package com.yhsh.flowstudy.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.text.InputFilter;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,9 +34,9 @@ public class FlowLayout extends ViewGroup {
     private int maxLines;
     private int itemHorizontalMargin;
     private int itemVerticalMargin;
-    private float textMaxLength;
-    private float textColor;
-    private float borderColor;
+    private int textMaxLength;
+    private int textColor;
+    private int borderColor;
     private float borderRadius;
 
     public interface OnItemClickHistory {
@@ -58,7 +59,7 @@ public class FlowLayout extends ViewGroup {
         this.maxLines = maxLines;
     }
 
-    public float getItemHorizontalMargin() {
+    public int getItemHorizontalMargin() {
         return itemHorizontalMargin;
     }
 
@@ -66,7 +67,7 @@ public class FlowLayout extends ViewGroup {
         this.itemHorizontalMargin = SizeUtils.dip2px(itemHorizontalMargin);
     }
 
-    public float getItemVerticalMargin() {
+    public int getItemVerticalMargin() {
         return itemVerticalMargin;
     }
 
@@ -74,27 +75,27 @@ public class FlowLayout extends ViewGroup {
         this.itemVerticalMargin = SizeUtils.dip2px(itemVerticalMargin);
     }
 
-    public float getTextMaxLength() {
+    public int getTextMaxLength() {
         return textMaxLength;
     }
 
-    public void setTextMaxLength(float textMaxLength) {
+    public void setTextMaxLength(int textMaxLength) {
         this.textMaxLength = textMaxLength;
     }
 
-    public float getTextColor() {
+    public int getTextColor() {
         return textColor;
     }
 
-    public void setTextColor(float textColor) {
+    public void setTextColor(int textColor) {
         this.textColor = textColor;
     }
 
-    public float getBorderColor() {
+    public int getBorderColor() {
         return borderColor;
     }
 
-    public void setBorderColor(float borderColor) {
+    public void setBorderColor(int borderColor) {
         this.borderColor = borderColor;
     }
 
@@ -156,6 +157,8 @@ public class FlowLayout extends ViewGroup {
         for (int i = 0; i < mData.size(); i++) {
 //            TextView view = new TextView(getContext());
             TextView view = (TextView) LayoutInflater.from(getContext()).inflate(R.layout.item_flow_text, this, false);
+            //限制文本最大长度
+            view.setFilters(new InputFilter[]{new InputFilter.LengthFilter(textMaxLength)});
             view.setText(mData.get(i));
             //添加元素到父布局
             addView(view);

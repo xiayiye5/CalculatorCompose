@@ -82,6 +82,8 @@ public class FlowActivity extends AppCompatActivity {
         });
         //动态设置最大行数
 //        fw.setMaxLines(5);
+        //动态设置每个item文本的最大长度
+//        fw.setTextMaxLength(20);
     }
 
     private void queryHistoryList() {
