@@ -223,4 +223,8 @@ class MainActivity : AppCompatActivity() {
     fun flowLayout(view: View) {
         startActivity(Intent(this, FlowActivity::class.java))
     }
+
+    fun lyricLayout(view: View) {
+        startActivity(Intent(this, LyricActivity::class.java))
+    }
 }

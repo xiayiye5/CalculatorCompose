@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CalculatorCompose">
         <activity
+            android:name=".LyricActivity"
+            android:exported="false" />
+        <activity
             android:name=".FlowActivity"
             android:exported="false" />
         <activity

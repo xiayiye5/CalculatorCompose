@@ -9,4 +9,12 @@
         <attr name="borderColor" format="color" />
         <attr name="borderRadius" format="dimension" />
     </declare-styleable>
+
+    <declare-styleable name="LyricsView">
+        <attr name="normalColor" format="color" />
+        <attr name="highlightColor" format="color" />
+        <attr name="normalTextSize" format="dimension" />
+        <attr name="highlightTextSize" format="dimension" />
+    </declare-styleable>
+
 </resources>

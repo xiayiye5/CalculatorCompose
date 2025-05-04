@@ -87,4 +87,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sp_delete_person" />
+
+    <Button
+        android:id="@+id/btLyric"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="lyricLayout"
+        android:text="歌词页面"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btFlowLayout" />
 </androidx.constraintlayout.widget.ConstraintLayout>
