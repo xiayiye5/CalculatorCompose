@@ -97,4 +97,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btFlowLayout" />
+    <Button
+        android:id="@+id/potVlaue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="postValue"
+        android:text="测试postvalue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btLyric" />
 </androidx.constraintlayout.widget.ConstraintLayout>

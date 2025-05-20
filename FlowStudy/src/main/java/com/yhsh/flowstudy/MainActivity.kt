@@ -126,6 +126,9 @@ class MainActivity : AppCompatActivity() {
                 // 无操作
             }
         }
+        counter.observe(this) {
+            Log.d(TAG, "查看获取到的值：${it}")
+        }
     }
 
     private suspend fun callBack() {
@@ -226,5 +229,25 @@ class MainActivity : AppCompatActivity() {
 
     fun lyricLayout(view: View) {
         startActivity(Intent(this, LyricActivity::class.java))
+    }
+
+    fun postValue(view: View) {
+        incrementCounter()
+    }
+
+    private val counter = MutableLiveData<Int>()
+
+    fun getCounter(): Int? {
+        return counter.value
+    }
+
+    fun incrementCounter() {
+        // 快速连续多次调用 postValue
+        Thread {
+            for (i in 1..100) {
+                counter.postValue(i)
+                //Thread.sleep(10); // 如果加上短暂的停顿，可以显示更多不同的值
+            }
+        }.start()
     }
 }
