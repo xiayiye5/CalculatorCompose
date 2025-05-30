@@ -2,11 +2,11 @@ package com.yhsh.flowstudy.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.yhsh.flowstudy.bean.Event
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -31,7 +31,7 @@ class HomeModel : ViewModel() {
 
     @OptIn(DelicateCoroutinesApi::class)
     fun request() {
-        GlobalScope.launch(Dispatchers.Main) {
+        viewModelScope.launch(Dispatchers.Main) {
             data.value = "996"
             val peopleOne = Event("张三", 18, "男")
             //只支持挂起函数中调用
@@ -129,7 +129,7 @@ class HomeModel : ViewModel() {
     }
 
     fun test() {
-        GlobalScope.launch {
+        viewModelScope.launch {
             flow<Int> {
                 for (i in 0..2) {
                     //请注意这里延迟50毫秒是为了对比下面collectLatest的延迟

@@ -10,8 +10,10 @@ import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.Spinner
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.lifecycleScope
 import com.yhsh.flowstudy.bean.PersonRoom
 import com.yhsh.flowstudy.viewmodel.HomeModel
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -37,6 +39,7 @@ import kotlinx.coroutines.launch
 class MainActivity : AppCompatActivity() {
     private val TAG = this::class.java.simpleName
     private val viewModel: HomeModel by lazy { HomeModel() }
+    private val viewModel2 by viewModels<HomeModel>()
     lateinit var etByName: EditText
     lateinit var etInsertName: EditText
     lateinit var etInsertAge: EditText
@@ -56,7 +59,7 @@ class MainActivity : AppCompatActivity() {
         etInsertAge = findViewById(R.id.et_insert_age)
         etInsertAddress = findViewById(R.id.et_insert_address)
         spDeletePerson = findViewById(R.id.sp_delete_person)
-        GlobalScope.launch(Dispatchers.Main) {
+        lifecycleScope.launch(Dispatchers.Main) {
             val a = flow<Int> {
                 for (i in 0..10) {
                     emit(i)
