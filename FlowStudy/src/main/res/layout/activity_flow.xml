@@ -7,12 +7,25 @@
     android:orientation="vertical"
     tools:context=".FlowActivity">
 
-    <EditText
-        android:id="@+id/et_history"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:hint="请输入关键字" />
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/et_history"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:hint="请输入关键字" />
+
+        <Button
+            android:id="@+id/bt_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="删除" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/bt_history"

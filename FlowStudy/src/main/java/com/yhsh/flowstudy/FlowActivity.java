@@ -1,6 +1,7 @@
 package com.yhsh.flowstudy;
 
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -84,6 +85,14 @@ public class FlowActivity extends AppCompatActivity {
 //        fw.setMaxLines(5);
         //动态设置每个item文本的最大长度
 //        fw.setTextMaxLength(20);
+        findViewById(R.id.bt_delete).setOnClickListener(v -> {
+            //一个个删除文字
+            int selectionEnd = rtHistory.getSelectionEnd();
+            Editable text = rtHistory.getText();
+            if (selectionEnd > 0) {
+                text.delete(selectionEnd - 1, selectionEnd);
+            }
+        });
     }
 
     private void queryHistoryList() {
