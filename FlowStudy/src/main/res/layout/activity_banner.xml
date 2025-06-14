@@ -24,9 +24,9 @@
         android:id="@+id/point_select"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/point_group"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
         android:layout_marginBottom="30dp"
-        android:background="@drawable/shpe_point_select" />
+        android:background="@drawable/shape_point_select" />
 
 </RelativeLayout>
