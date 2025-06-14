@@ -1,6 +1,7 @@
 package com.yhsh.flowstudy
 
 import android.os.Bundle
+import android.widget.Button
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 
@@ -10,6 +11,8 @@ class GiftActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gift)
         val giftWallView = findViewById<GiftWallView>(R.id.viewPager2_gift)
+        val btnList1 = findViewById<Button>(R.id.btnList1)
+        val btnList2 = findViewById<Button>(R.id.btnList2)
 
         // 初始化礼物墙
         giftWallView.initialize(viewModel)
@@ -39,13 +42,13 @@ class GiftActivity : AppCompatActivity() {
         )
 
         // 按钮切换数据
-        /* btnList1.setOnClickListener {
-             giftWallView.showGift(giftList1)
-         }
+        btnList1.setOnClickListener {
+            giftWallView.showGift(giftList1)
+        }
 
-         btnList2.setOnClickListener {
-             giftWallView.showGift(giftList2)
-         }*/
+        btnList2.setOnClickListener {
+            giftWallView.showGift(giftList2)
+        }
 
         // 初始展示第一个列表
         giftWallView.showGift(giftList2)
