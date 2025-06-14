@@ -34,10 +34,15 @@
         android:onClick="addHistory"
         android:text="添加历史记录" />
     <!--此处FlowLayout设置的高度无效，因为再自定义中代码动态设置了高度为子布局的行高-->
-    <com.yhsh.flowstudy.view.FlowLayout
-        android:id="@+id/fw_layout"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:maxLines="100"
-        app:textMaxLength="25" />
+        android:layout_height="match_parent">
+
+        <com.yhsh.flowstudy.view.FlowLayout
+            android:id="@+id/fw_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:maxLines="100"
+            app:textMaxLength="25" />
+    </ScrollView>
 </LinearLayout>
