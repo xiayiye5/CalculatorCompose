@@ -93,6 +93,14 @@ public class FlowActivity extends AppCompatActivity {
                 text.delete(selectionEnd - 1, selectionEnd);
             }
         });
+        Thread t = new Thread(null, new Runnable() {
+            @Override
+            public void run() {
+                // Your code
+            }
+        }, "MyThread", 1024 * 1024); // 1MB Stack Size
+        t.start();
+        t.setUncaughtExceptionHandler((thread, throwable) -> {});
     }
 
     private void queryHistoryList() {

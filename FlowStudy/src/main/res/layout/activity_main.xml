@@ -74,7 +74,6 @@
         android:layout_height="wrap_content"
         android:onClick="deletePerson"
         android:text="删除用户"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sp_delete_person" />
 
@@ -84,9 +83,8 @@
         android:layout_height="wrap_content"
         android:onClick="flowLayout"
         android:text="跳转流式布局"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sp_delete_person" />
+        app:layout_constraintStart_toEndOf="@+id/btDeleteId"
+        app:layout_constraintTop_toTopOf="@+id/btDeleteId" />
 
     <Button
         android:id="@+id/btLyric"
@@ -94,16 +92,24 @@
         android:layout_height="wrap_content"
         android:onClick="lyricLayout"
         android:text="歌词页面"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btFlowLayout" />
+        app:layout_constraintStart_toEndOf="@+id/btFlowLayout"
+        app:layout_constraintTop_toTopOf="@+id/btFlowLayout" />
+
     <Button
-        android:id="@+id/potVlaue"
+        android:id="@+id/potValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="postValue"
         android:text="测试postvalue"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btLyric" />
+        app:layout_constraintTop_toBottomOf="@+id/btDeleteId" />
+
+    <Button
+        android:id="@+id/banner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="banner"
+        android:text="轮播图"
+        app:layout_constraintStart_toEndOf="@+id/potValue"
+        app:layout_constraintTop_toBottomOf="@+id/btDeleteId" />
 </androidx.constraintlayout.widget.ConstraintLayout>

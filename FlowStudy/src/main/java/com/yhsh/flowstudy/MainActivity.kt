@@ -236,6 +236,8 @@ class MainActivity : AppCompatActivity() {
 
     fun postValue(view: View) {
         incrementCounter()
+        //跳转礼物页面
+        startActivity(Intent(this, GiftActivity::class.java))
     }
 
     private val counter = MutableLiveData<Int>()

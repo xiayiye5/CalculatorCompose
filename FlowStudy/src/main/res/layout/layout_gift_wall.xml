@@ -1,0 +1,20 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#FDC"
+    android:orientation="vertical">
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" />
+
+    <me.relex.circleindicator.CircleIndicator3
+        android:id="@+id/pageIndicator"
+        android:layout_width="match_parent"
+        android:background="#ACD"
+        android:layout_height="16dp"
+        android:layout_gravity="center_horizontal"
+        android:padding="4dp" />
+</LinearLayout>
