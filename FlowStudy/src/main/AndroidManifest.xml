@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CalculatorCompose">
         <activity
+            android:name=".banner.BannerActivity"
+            android:exported="false" />
+        <activity
             android:name=".GiftActivity"
             android:exported="false" />
         <activity

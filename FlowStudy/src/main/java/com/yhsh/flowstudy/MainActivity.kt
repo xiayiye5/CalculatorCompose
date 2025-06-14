@@ -14,11 +14,11 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
+import com.yhsh.flowstudy.banner.BannerActivity
 import com.yhsh.flowstudy.bean.PersonRoom
 import com.yhsh.flowstudy.viewmodel.HomeModel
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.onFailure
@@ -254,5 +254,9 @@ class MainActivity : AppCompatActivity() {
                 //Thread.sleep(10); // 如果加上短暂的停顿，可以显示更多不同的值
             }
         }.start()
+    }
+
+    fun banner(view: View) {
+        startActivity(Intent(this, BannerActivity::class.java))
     }
 }
