@@ -200,6 +200,14 @@ public class FlowLayout extends ViewGroup {
                 continue;
             }
             measureChild(child, childrenWidthMeasureSpec, childrenHeightMeasureSpec);
+            //measureChild()
+            //ViewGroup 提供的封装方法，会自动处理父容器的 padding‌（但不会处理子 View 的 margin）8。
+            //内部会调用 getChildMeasureSpec() 生成子 View 的 MeasureSpec，再触发 child.measure()78。
+            //
+            //child.measure()
+            //View 的基础测量方法，直接根据传入的 MeasureSpec 计算尺寸，‌不自动处理任何边距‌69。
+            //需手动处理父容器 padding 和子 View margin 的逻辑8。
+            child.measure(childrenWidthMeasureSpec, childrenHeightMeasureSpec);
             //测量后可以拿到children宽高
             if (line.size() == 0) {
                 line.add(child);

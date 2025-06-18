@@ -259,4 +259,7 @@ class MainActivity : AppCompatActivity() {
     fun banner(view: View) {
         startActivity(Intent(this, BannerActivity::class.java))
     }
+    fun quickSearch(view: View) {
+        startActivity(Intent(this, QuickSearchActivity::class.java))
+    }
 }
