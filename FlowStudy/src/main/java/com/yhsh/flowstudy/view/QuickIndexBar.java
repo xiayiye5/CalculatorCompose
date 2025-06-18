@@ -12,6 +12,8 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 
+import com.yhsh.flowstudy.kit.SizeUtils;
+
 /**
  * 快速索引工具
  */
@@ -26,6 +28,8 @@ public class QuickIndexBar extends View {
     //26个英文字母集合
     private final String[] alphabetData = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
     private float cellHeight;
+    private final int mPaintSize = SizeUtils.dip2px(16);
+    private final int mPaintSelectSize = SizeUtils.dip2px(30);
 
 
     public QuickIndexBar(Context context) {
@@ -47,7 +51,7 @@ public class QuickIndexBar extends View {
 
     private void init() {
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mPaint.setTextSize(28);
+        mPaint.setTextSize(mPaintSize);
         mPaint.setColor(Color.RED);
         //设置文字剧中绘制
         mPaint.setTextAlign(Paint.Align.CENTER);
@@ -72,6 +76,9 @@ public class QuickIndexBar extends View {
         cellHeight = layoutHeight * 1.0f / alphabetData.length;
         float xPosition = layoutWidth * 1.0f / 2;
         for (int i = 0; i < alphabetData.length; i++) {
+            //选中后改变颜色并且放大字体
+            mPaint.setColor(lastIndex == i ? Color.BLACK : Color.RED);
+            mPaint.setTextSize(lastIndex == i ? mPaintSelectSize : mPaintSize);
             //Y坐标的位置是26个格子每个格子的高度一半+文字高度的一半
             canvas.drawText(alphabetData[i], xPosition, cellHeight / 2 + getTextHeight(alphabetData[i]) / 2 + cellHeight * i, mPaint);
             //每个格子之间画一条线
@@ -109,6 +116,8 @@ public class QuickIndexBar extends View {
             default:
                 break;
         }
+        //触摸时需要重绘画笔的颜色
+        invalidate();
         return true;
     }
 
