@@ -26,7 +26,7 @@ public class QuickIndexBar extends View {
     int lastIndex = -1;
     private static final String TAG = "QuickIndexBar";
     //26个英文字母集合
-    private final String[] alphabetData = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
+    private final String[] alphabetData = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "#"};
     private float cellHeight;
     private final int mPaintSize = SizeUtils.dip2px(16);
     private final int mPaintSelectSize = SizeUtils.dip2px(30);

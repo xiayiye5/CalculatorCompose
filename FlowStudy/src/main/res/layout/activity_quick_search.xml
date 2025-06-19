@@ -6,6 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".QuickSearchActivity">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        app:layout_constraintEnd_toStartOf="@+id/quick_index_bar"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <com.yhsh.flowstudy.view.QuickIndexBar
         android:id="@+id/quick_index_bar"
         android:layout_width="50dp"
