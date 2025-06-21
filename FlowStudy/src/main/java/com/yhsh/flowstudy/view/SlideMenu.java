@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Scroller;
 
 import java.util.List;
 
@@ -13,6 +14,7 @@ public class SlideMenu extends ViewGroup {
     private List<ViewGroup> viewGroups;
     private float startX;
     private static final String TAG = "SlideMenu";
+    private Scroller mScroller;
 
     public SlideMenu(Context context) {
         this(context, null);
@@ -32,7 +34,8 @@ public class SlideMenu extends ViewGroup {
     }
 
     private void initView() {
-
+        //创建滚动发模拟器
+        mScroller = new Scroller(getContext());
     }
 
     public void setMenuView(List<ViewGroup> viewGroups) {
@@ -110,13 +113,46 @@ public class SlideMenu extends ViewGroup {
                 int scrollX = getScrollX();
                 if (Math.abs(scrollX) > leftViewWidth / 2) {
                     //滑动距离超过一半，则滑动到最左边或最右边
-                    scrollTo(-leftViewWidth, 0);
+//                    scrollTo(-leftViewWidth, 0);
+                    //抬起时候执行平滑动画，方法抽取
+                    openLeftMenu(true, leftViewWidth);
                 } else {
                     //否则滑动回原来的位置
-                    scrollTo(0, 0);
+//                    scrollTo(0, 0);
+                    openLeftMenu(false, leftViewWidth);
                 }
                 break;
         }
         return true;
+    }
+
+    private void openLeftMenu(boolean open, int leftViewWidth) {
+        int startMoveX = getScrollX();
+        int dx;
+        if (open) {
+            //dx等于结束位置减去开始位置的差值
+            dx = -leftViewWidth - startMoveX;
+        } else {
+            //右边布局的结束坐标减去开始位置的差值 0-startMoveX
+            dx = 0 - startMoveX;
+        }
+        //动画时间根据滑动的距离决定，距离越长动画时间越短
+        int duration = (int) (Math.abs(startMoveX) / (leftViewWidth * 1.0f) * 500);
+        //添加统一的平滑动画
+        Log.d(TAG, "animation duration=" + duration + ",startMoveX=" + startMoveX + ",leftViewWidth=" + leftViewWidth + ",dx=" + dx);
+        mScroller.startScroll(startMoveX, 0, dx, 0, duration);
+        //需要先重绘一次，才会调用computeScroll方法
+        invalidate();
+    }
+
+    @Override
+    public void computeScroll() {
+        super.computeScroll();
+        if (mScroller.computeScrollOffset()) {
+            int currX = mScroller.getCurrX();
+            Log.d(TAG, "currX = " + currX);
+            scrollTo(currX, mScroller.getCurrY());
+            invalidate();
+        }
     }
 }
