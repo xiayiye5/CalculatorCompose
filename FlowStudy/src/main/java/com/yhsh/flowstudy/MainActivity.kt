@@ -16,6 +16,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import com.yhsh.flowstudy.banner.BannerActivity
 import com.yhsh.flowstudy.bean.PersonRoom
+import com.yhsh.flowstudy.slide.SlideMenuActivity
 import com.yhsh.flowstudy.viewmodel.HomeModel
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
@@ -259,7 +260,12 @@ class MainActivity : AppCompatActivity() {
     fun banner(view: View) {
         startActivity(Intent(this, BannerActivity::class.java))
     }
+
     fun quickSearch(view: View) {
         startActivity(Intent(this, QuickSearchActivity::class.java))
+    }
+
+    fun slideMenu(view: View) {
+        startActivity(Intent(this, SlideMenuActivity::class.java))
     }
 }
