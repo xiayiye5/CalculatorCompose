@@ -2,6 +2,8 @@ package com.yhsh.flowstudy.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -9,6 +11,8 @@ import java.util.List;
 
 public class SlideMenu extends ViewGroup {
     private List<ViewGroup> viewGroups;
+    private float startX;
+    private static final String TAG = "SlideMenu";
 
     public SlideMenu(Context context) {
         this(context, null);
@@ -73,5 +77,38 @@ public class SlideMenu extends ViewGroup {
                 childOther.layout(0, 0, childOther.getMeasuredWidth(), b);
             }
         }
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                //获取手指在当前View的X坐标
+                startX = event.getX();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                //移动过程中，根据手指移动的距离滑动第一个子View
+                int leftViewWidth = getChildAt(0).getMeasuredWidth();
+                float moveX = event.getX();
+                scrollBy((int) (startX - moveX), 0);
+                //判断左右两边超出边界的情况
+                int currentScrollX = getScrollX();
+                Log.d(TAG, "currentScrollX = " + currentScrollX + ", leftViewWidth = " + leftViewWidth);
+                if (currentScrollX < -leftViewWidth) {
+                    //只能滑动到最左边后不能继续滑动
+                    scrollTo(-leftViewWidth, 0);
+                } else if (currentScrollX > 0) {
+                    //不能超出右边界
+                    scrollTo(0, 0);
+                } else {
+                    //滑动过程中，更新手指的X坐标
+                    startX = moveX;
+                }
+                break;
+            case MotionEvent.ACTION_UP:
+                break;
+
+        }
+        return true;
     }
 }
