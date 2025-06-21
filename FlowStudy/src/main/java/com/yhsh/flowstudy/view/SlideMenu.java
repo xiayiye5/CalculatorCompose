@@ -81,6 +81,7 @@ public class SlideMenu extends ViewGroup {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        int leftViewWidth = getChildAt(0).getMeasuredWidth();
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 //获取手指在当前View的X坐标
@@ -88,7 +89,6 @@ public class SlideMenu extends ViewGroup {
                 break;
             case MotionEvent.ACTION_MOVE:
                 //移动过程中，根据手指移动的距离滑动第一个子View
-                int leftViewWidth = getChildAt(0).getMeasuredWidth();
                 float moveX = event.getX();
                 scrollBy((int) (startX - moveX), 0);
                 //判断左右两边超出边界的情况
@@ -106,8 +106,16 @@ public class SlideMenu extends ViewGroup {
                 }
                 break;
             case MotionEvent.ACTION_UP:
+                //抬起手指时，判断滑动距离是否超过一半
+                int scrollX = getScrollX();
+                if (Math.abs(scrollX) > leftViewWidth / 2) {
+                    //滑动距离超过一半，则滑动到最左边或最右边
+                    scrollTo(-leftViewWidth, 0);
+                } else {
+                    //否则滑动回原来的位置
+                    scrollTo(0, 0);
+                }
                 break;
-
         }
         return true;
     }
