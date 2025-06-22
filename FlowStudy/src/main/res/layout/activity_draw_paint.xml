@@ -16,7 +16,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="saveImage"
-        android:text="保存图片"
+        android:text="保存/清空"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="paintColor"
-        android:text="颜色"
+        android:text="随机色"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/btn_save" />
 
@@ -34,7 +34,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="paintWidth"
-        android:text="粗细"
+        android:text="粗"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/btn_paint_color" />
+
+    <Button
+        android:id="@+id/btn_paint_width_less"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="paintWidthLess"
+        android:text="细"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btn_paint_width" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
