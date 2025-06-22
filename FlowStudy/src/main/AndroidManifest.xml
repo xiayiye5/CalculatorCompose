@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CalculatorCompose">
         <activity
+            android:name=".draw.DrawPaintActivity"
+            android:exported="false" />
+        <activity
             android:name=".slide.SlideMenuActivity"
             android:exported="false" />
         <activity

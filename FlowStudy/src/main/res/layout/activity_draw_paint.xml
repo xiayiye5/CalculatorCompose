@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".draw.DrawPaintActivity">
+
+    <ImageView
+        android:id="@+id/iv_paint"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <Button
+        android:id="@+id/btn_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="saveImage"
+        android:text="保存图片"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btn_paint_color"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="paintColor"
+        android:text="颜色"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btn_save" />
+
+    <Button
+        android:id="@+id/btn_paint_width"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="paintWidth"
+        android:text="粗细"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btn_paint_color" />
+</androidx.constraintlayout.widget.ConstraintLayout>

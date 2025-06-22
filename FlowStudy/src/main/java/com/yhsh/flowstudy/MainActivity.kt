@@ -16,6 +16,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import com.yhsh.flowstudy.banner.BannerActivity
 import com.yhsh.flowstudy.bean.PersonRoom
+import com.yhsh.flowstudy.draw.DrawPaintActivity
 import com.yhsh.flowstudy.slide.SlideMenuActivity
 import com.yhsh.flowstudy.viewmodel.HomeModel
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -32,6 +33,7 @@ import kotlinx.coroutines.launch
 
 /**
  * 检索未使用的资源文件 inspect code
+ *  如何查看一个接口所有的实现类：Interpolator ctrl+alt+B
  *  GlobalScope.launch(){}默认Dispatchers.Default子线程
  *  viewModelScope.launch(){}默认Dispatchers.Main主线程
  *  lifecycleScope.launch(){}默认Dispatchers.Main主线程
@@ -267,5 +269,9 @@ class MainActivity : AppCompatActivity() {
 
     fun slideMenu(view: View) {
         startActivity(Intent(this, SlideMenuActivity::class.java))
+    }
+
+    fun drawPaint(view: View) {
+        startActivity(Intent(this, DrawPaintActivity::class.java))
     }
 }
