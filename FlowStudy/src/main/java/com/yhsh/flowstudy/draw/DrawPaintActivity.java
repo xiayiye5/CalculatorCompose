@@ -58,8 +58,8 @@ public class DrawPaintActivity extends AppCompatActivity {
         paint = new Paint();
         paint.setColor(Color.RED);
         paint.setStrokeWidth(paintWidth);
-        //开始作画
-        canvas.drawBitmap(bitmapCopy, new Matrix(), paint);
+        //开始作画,添加默认背景
+        canvas.drawBitmap(bitmap, new Matrix(), paint);
 //        canvas.drawLine(100, 100, 200, 200, paint);
         ivPaint.setImageBitmap(bitmapCopy);
         //设置画布的触摸事件
@@ -97,6 +97,8 @@ public class DrawPaintActivity extends AppCompatActivity {
         btnSave.setOnLongClickListener(view -> {
             //清空画布
             canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+            //清空后重新绘制背景
+            canvas.drawBitmap(bitmap, new Matrix(), paint);
             ivPaint.setImageBitmap(bitmapCopy);
             return true;
         });
