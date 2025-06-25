@@ -1,5 +1,6 @@
 package com.yhsh.playandroid.net
 
+import com.yhsh.playandroid.bean.ArticleBean
 import com.yhsh.playandroid.bean.BannerBean
 import com.yhsh.playandroid.bean.UserLoginResponse
 import kotlinx.coroutines.flow.Flow
@@ -62,5 +63,17 @@ object API {
             }
         }
 
+    }
+
+    fun homeArticleList(page: Int = 0): Flow<ArticleBean> {
+        return flow {
+            val response = apiService.homeArticleList(page)
+            if (response.errorCode == 0 && response.data != null) {
+                emit(response)
+            } else {
+                //文章列表获取失败抛出异常
+                throw Exception(response.errorMsg)
+            }
+        }
     }
 }
