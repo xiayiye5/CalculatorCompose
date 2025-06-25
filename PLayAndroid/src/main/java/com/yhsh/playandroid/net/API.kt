@@ -1,5 +1,6 @@
 package com.yhsh.playandroid.net
 
+import com.yhsh.playandroid.bean.BannerBean
 import com.yhsh.playandroid.bean.UserLoginResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -48,5 +49,18 @@ object API {
                                 }
                             })*/
         }
+    }
+
+    fun banner(): Flow<BannerBean> {
+        return flow {
+            val response = apiService.banner()
+            if (response.errorCode == 0 && response.data != null) {
+                emit(response)
+            } else {
+                //登录失败抛出异常
+                throw Exception(response.errorMsg)
+            }
+        }
+
     }
 }

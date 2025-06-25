@@ -8,6 +8,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.viewpager.widget.ViewPager
+import com.google.android.material.tabs.TabLayout
+import com.yhsh.playandroid.page.HomeFragment
+import com.yhsh.playandroid.page.MineFragment
+import com.yhsh.playandroid.page.StudyFragment
 import com.yhsh.playandroid.viewmodel.LoginViewModel
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
@@ -15,9 +20,31 @@ import kotlinx.coroutines.launch
 class MainActivity : AppCompatActivity() {
     private val loginViewModel by viewModels<LoginViewModel>()
     private val TAG = "MainActivity"
+    private val listPage = listOf(
+        HomeFragment.newInstance("home", "1"),
+        StudyFragment.newInstance("study", "2"),
+        MineFragment.newInstance("mine", "3")
+    )
+    private val tabList = listOf("首页", "学习", "我的")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val viewPager = findViewById<ViewPager>(R.id.viewPager)
+        viewPager.adapter = HomeAdapter(supportFragmentManager, listPage)
+        val tabLayout = findViewById<TabLayout>(R.id.tabLayout)
+        // 正确初始化示例
+        tabLayout.apply {
+            setupWithViewPager(viewPager) // 确保viewPager非空
+            tabList.forEachIndexed { index, title ->
+                getTabAt(index)?.let { tab ->  // 安全调用操作符
+                    tab.text = title
+                    tab.setIcon(R.drawable.ic_launcher_background)
+                }
+            }
+        }
+
+
         /*val url = "https://www.wanandroid.com/user/login"
         val body = FormBody.Builder()
             .add("username", "铁路12306")
