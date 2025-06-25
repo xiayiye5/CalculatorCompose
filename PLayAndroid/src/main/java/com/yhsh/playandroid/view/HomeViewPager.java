@@ -20,6 +20,7 @@ public class HomeViewPager extends ViewPager {
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         getParent().requestDisallowInterceptTouchEvent(true);
+        //下面不能直接返回true,否则会导致ViewPager里面的子View拿不到点击事件
         return super.onInterceptTouchEvent(ev);
     }
 }

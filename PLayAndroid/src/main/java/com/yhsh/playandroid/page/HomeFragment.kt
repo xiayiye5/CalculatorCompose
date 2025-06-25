@@ -1,8 +1,10 @@
 package com.yhsh.playandroid.page
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
@@ -30,18 +32,26 @@ class HomeFragment : BaseFragment() {
         lifecycleScope.launch {
             bannerViewModel._bannerState.filterNotNull().collect {
                 if (imgList.size == 0) {
-                    it.data?.forEach { _ ->
+                    it.data?.forEachIndexed { index, banner ->
                         val iv = ImageView(requireContext())
+                        iv.setOnClickListener {
+                            Toast.makeText(activity, "点击了:$index", Toast.LENGTH_SHORT).show()
+                        }
                         imgList.add(iv)
                     }
                 }
                 it.data?.let { url ->
                     bannerAdapter.refreshBanner(imgList, url)
+                    bannerViewModel.startLoop(homeViewPager)
                 }
             }
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        bannerViewModel.stopLoop()
+    }
     override fun layoutViewId(): Int = R.layout.fragment_home
 
     companion object {
