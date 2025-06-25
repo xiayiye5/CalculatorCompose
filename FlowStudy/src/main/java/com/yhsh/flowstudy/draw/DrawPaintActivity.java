@@ -83,6 +83,8 @@ public class DrawPaintActivity extends AppCompatActivity {
                         canvas.drawLine(startX, startY, endX, endY, paint);
                         startX = endX;
                         startY = endY;
+                        //设置像素点，设置颜色和位置
+                        bitmapCopy.setPixel(100, 100, Color.TRANSPARENT);
                         //最后显示到图片上面
                         ivPaint.setImageBitmap(bitmapCopy);
                         break;
