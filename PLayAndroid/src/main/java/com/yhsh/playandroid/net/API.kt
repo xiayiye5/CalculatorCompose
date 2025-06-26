@@ -3,6 +3,7 @@ package com.yhsh.playandroid.net
 import android.util.Log
 import com.yhsh.playandroid.bean.ArticleBean
 import com.yhsh.playandroid.bean.BannerBean
+import com.yhsh.playandroid.bean.BannerList
 import com.yhsh.playandroid.bean.UserLoginBean
 import com.yhsh.playandroid.util.AppUtils
 import com.yhsh.playandroid.util.CacheUtil
@@ -59,9 +60,22 @@ object API {
 
     fun banner(): Flow<List<BannerBean>> {
         return flow {
+            if (!NetworkUtils.isNetworkConnected(AppUtils.context())) {
+                val bannerList = CacheUtil.takeDataObj("banner", BannerList::class.java)
+                if (null != bannerList && bannerList.bannerBean.isNotEmpty()) {
+                    Log.d(TAG, "显示banner缓存数据:${bannerList.bannerBean[0].title}")
+                    //优先显示缓存数据
+                    emit(bannerList.bannerBean)
+                }
+            }
             val response = apiService.banner()
             if (response.errorCode == 0 && response.data != null) {
                 emit(response.data)
+                val bannerEmptyList = mutableListOf<BannerBean>()
+                bannerEmptyList.addAll(response.data)
+                val bannerData = BannerList(bannerEmptyList)
+                //缓存banner对象
+                CacheUtil.saveObj("banner", bannerData)
             } else {
                 //登录失败抛出异常
                 throw Exception(response.errorMsg)
