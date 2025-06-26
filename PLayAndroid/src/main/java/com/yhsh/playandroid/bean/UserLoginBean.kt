@@ -3,13 +3,7 @@ package com.yhsh.playandroid.bean
 /**
  * {"data":{"admin":false,"chapterTops":[],"coinCount":21,"collectIds":[],"email":"","icon":"","id":168243,"nickname":"铁路12306","password":"","publicName":"铁路12306","token":"","type":0,"username":"铁路12306"},"errorCode":0,"errorMsg":""}
  */
-data class UserLoginResponse(
-    val data: Data?,
-    val errorCode: Int,
-    val errorMsg: String
-)
-
-data class Data(
+data class UserLoginBean(
     val admin: Boolean,
     val chapterTops: List<Any>,
     val coinCount: Int,

@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 
 class BannerViewModel : BaseViewModel() {
     private val TAG = "BannerViewModel"
-    private val bannerState = MutableStateFlow<BannerBean?>(null)
+    private val bannerState = MutableStateFlow<List<BannerBean>?>(null)
     val _bannerState = bannerState.asStateFlow()
     private val handler = object : Handler(Looper.getMainLooper()) {
         override fun handleMessage(msg: Message) {

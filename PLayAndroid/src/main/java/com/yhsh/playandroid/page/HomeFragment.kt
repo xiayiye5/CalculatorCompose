@@ -41,7 +41,7 @@ class HomeFragment : BaseFragment() {
         lifecycleScope.launch {
             bannerViewModel._bannerState.filterNotNull().collect {
                 if (imgList.size == 0) {
-                    it.data?.forEachIndexed { index, banner ->
+                    it.forEachIndexed { index, banner ->
                         val iv = ImageView(requireContext())
                         iv.setOnClickListener {
                             Toast.makeText(activity, "点击了:$index", Toast.LENGTH_SHORT).show()
@@ -49,7 +49,7 @@ class HomeFragment : BaseFragment() {
                         imgList.add(iv)
                     }
                 }
-                it.data?.let { url ->
+                it.let { url ->
                     bannerAdapter.refreshBanner(imgList, url)
                     bannerViewModel.startLoop(homeViewPager)
                 }
@@ -57,8 +57,8 @@ class HomeFragment : BaseFragment() {
         }
         lifecycleScope.launch {
             articleViewModel._articleStateFlow.filterNotNull().collect {
-                Log.d(TAG, "打印文章${it.data?.datas?.size}")
-                it.data?.datas?.let { articles ->
+                Log.d(TAG, "打印文章${it.datas.size}")
+                it.datas.let { articles ->
                     articleData.addAll(articles)
                     articleAdapter.updateArticle(articles)
                 }

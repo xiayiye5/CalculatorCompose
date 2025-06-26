@@ -38,13 +38,8 @@ package com.yhsh.playandroid.bean
 "errorMsg": ""
 }
  */
-data class BannerBean(
-    val `data`: List<Banner>?,
-    val errorCode: Int,
-    val errorMsg: String
-)
 
-data class Banner(
+data class BannerBean(
     val desc: String,
     val id: Int,
     val imagePath: String,

@@ -18,8 +18,8 @@ class HomeArticleListViewModel : BaseViewModel() {
             API.homeArticleList().catch {
                 Log.d(TAG, "获取文章列表失败：${it.message}")
             }.collect {
-                if (it.data?.datas?.isNotEmpty() == true) {
-                    Log.d(TAG, "获取文章列表成功:${it.data.total}")
+                if (it.datas.isNotEmpty()) {
+                    Log.d(TAG, "获取文章列表成功:${it.total}")
                     articleStateFlow.value = it
                 } else {
                     Log.d(TAG, "获取文章列表失败：文章条数为空")

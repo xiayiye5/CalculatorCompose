@@ -2,7 +2,7 @@ package com.yhsh.playandroid.net
 
 import com.yhsh.playandroid.bean.ArticleBean
 import com.yhsh.playandroid.bean.BannerBean
-import com.yhsh.playandroid.bean.UserLoginResponse
+import com.yhsh.playandroid.bean.UserLoginBean
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import okhttp3.OkHttpClient
@@ -20,12 +20,12 @@ object API {
         apiService = retrofit.create(ApiService::class.java)
     }
 
-    fun login(userName: String, password: String): Flow<UserLoginResponse> {
-        return flow<UserLoginResponse> {
+    fun login(userName: String, password: String): Flow<UserLoginBean> {
+        return flow {
             //retrofit结合协程写法
             val response = apiService.login(userName, password)
             if (response.errorCode == 0 && response.data != null) {
-                emit(response)
+                emit(response.data)
             } else {
                 //登录失败抛出异常
                 throw Exception(response.errorMsg)
@@ -52,11 +52,11 @@ object API {
         }
     }
 
-    fun banner(): Flow<BannerBean> {
+    fun banner(): Flow<List<BannerBean>> {
         return flow {
             val response = apiService.banner()
             if (response.errorCode == 0 && response.data != null) {
-                emit(response)
+                emit(response.data)
             } else {
                 //登录失败抛出异常
                 throw Exception(response.errorMsg)
@@ -69,7 +69,7 @@ object API {
         return flow {
             val response = apiService.homeArticleList(page)
             if (response.errorCode == 0 && response.data != null) {
-                emit(response)
+                emit(response.data)
             } else {
                 //文章列表获取失败抛出异常
                 throw Exception(response.errorMsg)

@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
         loginViewModel.login("铁路12306", "tielu12306")
         lifecycleScope.launch {
             loginViewModel._loginState.filterNotNull().collect {
-                val name = "${it.data?.username}登录成功"
+                val name = "${it.username}登录成功"
                 Toast.makeText(this@MainActivity, name, Toast.LENGTH_SHORT).show()
             }
         }

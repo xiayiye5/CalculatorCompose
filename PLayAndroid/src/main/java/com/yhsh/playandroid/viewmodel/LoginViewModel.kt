@@ -2,7 +2,7 @@ package com.yhsh.playandroid.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.viewModelScope
-import com.yhsh.playandroid.bean.UserLoginResponse
+import com.yhsh.playandroid.bean.UserLoginBean
 import com.yhsh.playandroid.net.API
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 
 class LoginViewModel : BaseViewModel() {
     val TAG = "LoginViewModel"
-    private val loginState = MutableStateFlow<UserLoginResponse?>(null)
+    private val loginState = MutableStateFlow<UserLoginBean?>(null)
     val _loginState = loginState.asStateFlow()
     fun login(userName: String, password: String) {
         viewModelScope.launch {
