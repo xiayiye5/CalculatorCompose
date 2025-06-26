@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.yhsh.playandroid.R
 import com.yhsh.playandroid.bean.Article
+import com.yhsh.playandroid.util.SpaceItemDecoration
 import com.yhsh.playandroid.viewmodel.BannerViewModel
 import com.yhsh.playandroid.viewmodel.HomeArticleListViewModel
 import kotlinx.coroutines.flow.filterNotNull
@@ -32,9 +33,16 @@ class HomeFragment : BaseFragment() {
         val bannerAdapter = BannerAdapter()
         //初始化banner数量
         homeViewPager.adapter = bannerAdapter
-        homeRecyclerView.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-        val articleAdapter = ArticleAdapter()
-        homeRecyclerView.adapter = articleAdapter
+        val rvLayoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+        val articleAdapter = ArticleAdapter() {
+            Toast.makeText(activity, "点击了$it", Toast.LENGTH_SHORT).show()
+        }
+        homeRecyclerView.apply {
+            layoutManager = rvLayoutManager
+            adapter = articleAdapter
+            //添加分割线
+            addItemDecoration(SpaceItemDecoration(30, rvLayoutManager))
+        }
         //请求接口数据
         bannerViewModel.banner()
         articleViewModel.getArticleList(0)

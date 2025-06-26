@@ -86,7 +86,10 @@ object API {
             if (response.errorCode == 0 && response.data != null) {
                 emit(response.data)
                 //开始缓存数据
-                CacheUtil.saveObj("articleList", response.data)
+                if (page == 0) {
+                    //仅缓存第一页数据
+                    CacheUtil.saveObj("articleList", response.data)
+                }
             } else {
                 //文章列表获取失败抛出异常
                 throw Exception(response.errorMsg)

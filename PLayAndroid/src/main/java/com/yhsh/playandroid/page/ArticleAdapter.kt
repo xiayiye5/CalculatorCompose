@@ -1,5 +1,6 @@
 package com.yhsh.playandroid.page
 
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +12,8 @@ import com.bumptech.glide.Glide
 import com.yhsh.playandroid.R
 import com.yhsh.playandroid.bean.Article
 
-class ArticleAdapter() : RecyclerView.Adapter<ArticleAdapter.ArticleHolder>() {
+class ArticleAdapter(var onClick: (url: String) -> Unit) :
+    RecyclerView.Adapter<ArticleAdapter.ArticleHolder>() {
     private var articleData: List<Article> = ArrayList()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleHolder {
         val articleView = LayoutInflater.from(parent.context)
@@ -26,17 +28,25 @@ class ArticleAdapter() : RecyclerView.Adapter<ArticleAdapter.ArticleHolder>() {
     override fun onBindViewHolder(holder: ArticleHolder, position: Int) {
         val article = articleData[position]
         Glide.with(holder.itemView.context).load(R.mipmap.ic_launcher).into(holder.ivHeaderImage)
+        holder.tvHeaderTime.text = article.niceShareDate
         holder.tvHeaderTitle.text = article.title
-        holder.tvHeaderType.text = "${article.shareUser}_${article.niceShareDate}"
+        holder.tvHeaderType.text =
+            if (TextUtils.isEmpty(article.shareUser)) article.author else article.shareUser
+        holder.itemView.setOnClickListener {
+            //执行点击事件
+            onClick.invoke(article.link)
+        }
     }
 
     class ArticleHolder(articleView: View) : ViewHolder(articleView) {
         var ivHeaderImage: ImageView
+        var tvHeaderTime: TextView
         var tvHeaderTitle: TextView
         var tvHeaderType: TextView
 
         init {
             ivHeaderImage = articleView.findViewById<ImageView>(R.id.iv_header_image)
+            tvHeaderTime = articleView.findViewById<TextView>(R.id.tv_header_time)
             tvHeaderTitle = articleView.findViewById<TextView>(R.id.tv_header_title)
             tvHeaderType = articleView.findViewById<TextView>(R.id.tv_header_type)
         }

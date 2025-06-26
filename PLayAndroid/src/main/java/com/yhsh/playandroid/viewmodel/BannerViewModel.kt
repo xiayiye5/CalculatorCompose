@@ -52,5 +52,6 @@ class BannerViewModel : BaseViewModel() {
      */
     fun stopLoop() {
         handler.removeCallbacksAndMessages(null)
+        Log.d(TAG, "停止了轮播图滚动")
     }
 }

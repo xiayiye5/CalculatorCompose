@@ -1,22 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:background="@drawable/article_item_bg_selector"
+    android:orientation="vertical"
+    android:padding="5dp">
 
     <ImageView
         android:id="@+id/iv_header_image"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:contentDescription="@string/app_name" />
+        android:contentDescription="@string/app_name"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_header_time"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:paddingEnd="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/iv_header_image"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteY="5dp" />
 
     <TextView
         android:id="@+id/tv_header_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/iv_header_image"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@+id/iv_header_image"
+        tools:layout_editor_absoluteX="5dp" />
 
     <TextView
         android:id="@+id/tv_header_type"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-</LinearLayout>
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_header_title"
+        android:paddingBottom="10dp"
+        app:layout_constraintStart_toEndOf="@+id/iv_header_image"
+        app:layout_constraintTop_toBottomOf="@+id/tv_header_title"
+        tools:layout_editor_absoluteY="5dp" />
+</androidx.constraintlayout.widget.ConstraintLayout>
