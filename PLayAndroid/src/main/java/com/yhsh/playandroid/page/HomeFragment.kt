@@ -4,14 +4,17 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
+import androidx.viewpager.widget.ViewPager.SimpleOnPageChangeListener
 import com.yhsh.playandroid.R
 import com.yhsh.playandroid.bean.Article
+import com.yhsh.playandroid.bean.BannerBean
 import com.yhsh.playandroid.util.SpaceItemDecoration
 import com.yhsh.playandroid.viewmodel.BannerViewModel
 import com.yhsh.playandroid.viewmodel.HomeArticleListViewModel
@@ -27,9 +30,11 @@ class HomeFragment : BaseFragment() {
     private val imgList: ArrayList<ImageView> = ArrayList()
     private val articleData = mutableListOf<Article>()
     private val TAG = "HomeFragment"
+    private var bannerData: List<BannerBean>? = null
     override fun initData(view: View) {
         val homeViewPager = view.findViewById<ViewPager>(R.id.home_viewPager)
         val homeRecyclerView = view.findViewById<RecyclerView>(R.id.home_recyclerView)
+        val homeBannerTitle = view.findViewById<TextView>(R.id.home_banner_title)
         val bannerAdapter = BannerAdapter()
         //初始化banner数量
         homeViewPager.adapter = bannerAdapter
@@ -58,11 +63,22 @@ class HomeFragment : BaseFragment() {
                     }
                 }
                 it.let { url ->
+                    bannerData = url
+                    //设置标题
+                    homeBannerTitle.text = url[0].title
                     bannerAdapter.refreshBanner(imgList, url)
                     bannerViewModel.startLoop(homeViewPager)
                 }
             }
         }
+        homeViewPager.addOnPageChangeListener(object : SimpleOnPageChangeListener() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                bannerData?.let {
+                    homeBannerTitle.text = it[position].title
+                }
+            }
+        })
         lifecycleScope.launch {
             articleViewModel._articleStateFlow.filterNotNull().collect {
                 Log.d(TAG, "打印文章${it.datas.size}")
