@@ -1,8 +1,12 @@
 package com.yhsh.playandroid.net
 
+import android.util.Log
 import com.yhsh.playandroid.bean.ArticleBean
 import com.yhsh.playandroid.bean.BannerBean
 import com.yhsh.playandroid.bean.UserLoginBean
+import com.yhsh.playandroid.util.AppUtils
+import com.yhsh.playandroid.util.CacheUtil
+import com.yhsh.playandroid.util.NetworkUtils
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import okhttp3.OkHttpClient
@@ -12,6 +16,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 object API {
     private const val BASE_URL = "https://www.wanandroid.com/"
     private var apiService: ApiService
+    private val TAG = "API"
 
     init {
         val client = OkHttpClient.Builder().addInterceptor(NetInterceptor()).build()
@@ -67,9 +72,21 @@ object API {
 
     fun homeArticleList(page: Int = 0): Flow<ArticleBean> {
         return flow {
+            if (!NetworkUtils.isNetworkConnected(AppUtils.context())) {
+                //未链接网络使用缓存
+                val articleBean = CacheUtil.takeDataObj("articleList", ArticleBean::class.java)
+                if (null != articleBean) {
+                    //优先显示缓存，再更新服务器上面的最新数据
+                    emit(articleBean)
+                } else {
+                    Log.d(TAG, "网络异常,无法展示文章列表")
+                }
+            }
             val response = apiService.homeArticleList(page)
             if (response.errorCode == 0 && response.data != null) {
                 emit(response.data)
+                //开始缓存数据
+                CacheUtil.saveObj("articleList", response.data)
             } else {
                 //文章列表获取失败抛出异常
                 throw Exception(response.errorMsg)

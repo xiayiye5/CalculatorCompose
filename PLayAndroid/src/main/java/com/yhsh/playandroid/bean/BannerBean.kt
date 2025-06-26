@@ -1,5 +1,8 @@
 package com.yhsh.playandroid.bean
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
 /**
  * {
 "data": [
@@ -38,7 +41,7 @@ package com.yhsh.playandroid.bean
 "errorMsg": ""
 }
  */
-
+@Parcelize
 data class BannerBean(
     val desc: String,
     val id: Int,
@@ -48,4 +51,4 @@ data class BannerBean(
     val title: String,
     val type: Int,
     val url: String
-)
+) : Parcelable

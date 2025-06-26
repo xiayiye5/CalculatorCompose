@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.viewpager.widget.PagerAdapter
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.yhsh.playandroid.bean.BannerBean
 
 class BannerAdapter : PagerAdapter() {
@@ -26,7 +27,8 @@ class BannerAdapter : PagerAdapter() {
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val img = imgList[position]
-        Glide.with(img.context).load(urlList[position].imagePath).into(img)
+        Glide.with(img.context).load(urlList[position].imagePath)
+            .diskCacheStrategy(DiskCacheStrategy.ALL).into(img)
         if (img.parent != null) {
             //移除后再添加相关的view 处理磁异常问题
             // Process: com.yhsh.playandroid, PID: 30914 java.lang.IllegalStateException: The specified child already has a parent. You must call removeView() on the child's parent first.
