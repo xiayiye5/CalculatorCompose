@@ -15,9 +15,11 @@ import androidx.viewpager.widget.ViewPager.SimpleOnPageChangeListener
 import com.yhsh.playandroid.R
 import com.yhsh.playandroid.bean.Article
 import com.yhsh.playandroid.bean.BannerBean
+import com.yhsh.playandroid.util.AppUtils
 import com.yhsh.playandroid.util.SpaceItemDecoration
 import com.yhsh.playandroid.viewmodel.BannerViewModel
 import com.yhsh.playandroid.viewmodel.HomeArticleListViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 
@@ -46,7 +48,7 @@ class HomeFragment : BaseFragment() {
             layoutManager = rvLayoutManager
             adapter = articleAdapter
             //添加分割线
-            addItemDecoration(SpaceItemDecoration(30, rvLayoutManager))
+            addItemDecoration(SpaceItemDecoration(AppUtils.dp2pxInt(10f), rvLayoutManager))
         }
         //请求接口数据
         bannerViewModel.banner()
@@ -54,7 +56,7 @@ class HomeFragment : BaseFragment() {
         lifecycleScope.launch {
             bannerViewModel._bannerState.filterNotNull().collect {
                 if (imgList.size == 0) {
-                    it.forEachIndexed { index, banner ->
+                    it.forEachIndexed { index, _ ->
                         val iv = ImageView(requireContext())
                         iv.setOnClickListener {
                             Toast.makeText(activity, "点击了:$index", Toast.LENGTH_SHORT).show()
@@ -81,6 +83,8 @@ class HomeFragment : BaseFragment() {
         })
         lifecycleScope.launch {
             articleViewModel._articleStateFlow.filterNotNull().collect {
+                //延迟1毫秒，让banner数据先展示
+                delay(1)
                 Log.d(TAG, "打印文章${it.datas.size}")
                 it.datas.let { articles ->
                     articleData.addAll(articles)

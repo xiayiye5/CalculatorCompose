@@ -15,7 +15,7 @@ class HomeArticleListViewModel : BaseViewModel() {
     var _articleStateFlow = articleStateFlow.asStateFlow()
     fun getArticleList(page: Int = 0) {
         viewModelScope.launch {
-            API.homeArticleList().catch {
+            API.homeArticleList(page).catch {
                 Log.d(TAG, "获取文章列表失败：${it.message}")
             }.collect {
                 if (it.datas.isNotEmpty()) {
