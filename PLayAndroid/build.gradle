@@ -49,8 +49,11 @@ dependencies {
 
     //添加缓存三方库
     implementation 'com.tencent:mmkv:1.2.14'
+    //添加下拉刷新库 在gradle.properties中必须配置 android.enableJetifier=true android.useAndroidX=true 否则报错找不到刷新库
+    implementation 'io.github.scwang90:refresh-layout-kernel:2.0.6'
+    implementation 'io.github.scwang90:refresh-footer-classics:2.0.6'
 
-
+    implementation 'androidx.core:core:1.8.0'
     implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.google.android.material:material:1.5.0'

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.SimpleOnPageChangeListener
+import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import com.yhsh.playandroid.R
 import com.yhsh.playandroid.bean.Article
 import com.yhsh.playandroid.bean.BannerBean
@@ -37,6 +38,8 @@ class HomeFragment : BaseFragment() {
         val homeViewPager = view.findViewById<ViewPager>(R.id.home_viewPager)
         val homeRecyclerView = view.findViewById<RecyclerView>(R.id.home_recyclerView)
         val homeBannerTitle = view.findViewById<TextView>(R.id.home_banner_title)
+        val refreshLayout = view.findViewById<SmartRefreshLayout>(R.id.refreshLayout)
+        articleViewModel.initRefresh(refreshLayout)
         val bannerAdapter = BannerAdapter()
         //初始化banner数量
         homeViewPager.adapter = bannerAdapter
@@ -85,10 +88,17 @@ class HomeFragment : BaseFragment() {
             articleViewModel._articleStateFlow.filterNotNull().collect {
                 //延迟1毫秒，让banner数据先展示
                 delay(1)
-                Log.d(TAG, "打印文章${it.datas.size}")
+                Log.d(TAG, "打印文章${it.datas.size}-curPage:${it.curPage}-total:${it.pageCount}")
                 it.datas.let { articles ->
+                    if (it.curPage >= it.pageCount) {
+                        refreshLayout.setNoMoreData(true)
+                        return@let
+                    }
+                    //添加分页数据
                     articleData.addAll(articles)
-                    articleAdapter.updateArticle(articles)
+                    articleAdapter.updateArticle(articleData)
+                    //下一页数据更新成功隐藏加载更多
+                    refreshLayout.finishLoadMore(true)
                 }
             }
         }
